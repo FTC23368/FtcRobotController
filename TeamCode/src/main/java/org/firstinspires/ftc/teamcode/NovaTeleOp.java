@@ -16,6 +16,11 @@ public class NovaTeleOp extends LinearOpMode {
         DcMotor frontRightMotor = hardwareMap.dcMotor.get("frontRightMotor");
         DcMotor backRightMotor = hardwareMap.dcMotor.get("backRightMotor");
 
+        // Declare linear slide motors
+        DcMotor leftLinearSlideMotor = hardwareMap.dcMotor.get("leftLinearSlideMotor");
+        telemetry.addData("Hardware: ", "Initialized");
+        DcMotor rightLinearSlideMotor = hardwareMap.dcMotor.get("rightLinearSlideMotor");
+
         // Reverse the right side motors. This may be wrong for your setup.
         // If your robot moves backwards when commanded to go forwards,
         // reverse the left side instead.
@@ -46,5 +51,16 @@ public class NovaTeleOp extends LinearOpMode {
             frontRightMotor.setPower(frontRightPower);
             backRightMotor.setPower(backRightPower);
         }
+
+        if (gamepad2.a) {
+            leftLinearSlideMotor.setPower(0.5);
+
+        }
+
+        /*
+        //go to fixed pos of linear slide
+        boolean linear_moving = true;
+        int distance_to_move = leftLinearSlideMotor.getCurrentPosition() - leftLinearSlideMotor.
+        */
     }
 }
