@@ -23,16 +23,10 @@ public class NovaMechanismTesting extends LinearOpMode {
         - Linear Actuators (left and right) --> DC motors
          */
 
+        Servo pocket = hardwareMap.servo.get("pocket");
+        DcMotor leftLinearSlide = hardwareMap.dcMotor.get("leftLinearSlide");
+        DcMotor rightLinearSlide = hardwareMap.dcMotor.get("rightLinearSlide");
 
-        Servo testServo = hardwareMap.servo.get("testServo");
-        //DcMotor testMotor = hardwareMap.dcMotor.get("testMotor");
-
-        double SERVO_HOME = 0.0;
-        double SERVO_MIN_POS = 0.0;
-        double SERVO_MAX_POS = 1.0;
-        double SERVO_SPEED = 0.3;
-
-        //double currServoPos = testServo.getPosition();
 
         waitForStart();
 
@@ -40,36 +34,52 @@ public class NovaMechanismTesting extends LinearOpMode {
 
         while (opModeIsActive()) {
 
-            if (gamepad2.a) {
-                testServo.setDirection(Servo.Direction.REVERSE);
-                testServo.setPosition(0.2);
-
-                System.out.println("servo moved");
+            // The code below is for pocket functionality (opening and closing the pocket)
+            if (gamepad2.y) {
+                // 45 degrees - POCKET OPEN
+                pocket.setDirection(Servo.Direction.REVERSE);
+                pocket.setPosition(0.15);
+                sleep(500);
+                // 0 degrees - POCKET CLOSED
+                pocket.setPosition(0);
             }
-            if (gamepad2.x) {
-                testServo.setDirection(Servo.Direction.FORWARD);
-                testServo.setPosition(0.1);
-            }
-            //testServo.setPosition(currServoPos);
-            //currServoPos = Range.clip(currServoPos, SERVO_MIN_POS, SERVO_MAX_POS);
 
+            // The code below is for linear slide functionality
+
+            if (gamepad2.dpad_left) {
+                //low height
+                double leftCurrentPosition = leftLinearSlide.getCurrentPosition();
+                double rightCurrentPosition = rightLinearSlide.getCurrentPosition();
+                leftLinearSlide.setTargetPosition(20);
+                while (leftCurrentPosition!= 0) {
+
+                }
+
+            }
+            if (gamepad2.dpad_up) {
+                //medium height
+                leftLinearSlide.setPower(0.5);
+                rightLinearSlide.setPower(-0.5);
+            }
+            if (gamepad2.dpad_right) {
+                //max height
+                leftLinearSlide.setPower(0.5);
+                rightLinearSlide.setPower(-0.5);
+            }
+            if (gamepad2.dpad_down) {
+                //min height
+                leftLinearSlide.setPower(-0.5);
+                rightLinearSlide.setPower(0.5);
+            }
 
             /*
             double power = PIDControl(100, testMotor.getCurrentPosition())
             testMotor.setPower(power);
             */
 
-
         }
-
-/*
-        //go to fixed pos of linear slide
-        boolean linear_moving = true;
-        int distance_to_move = leftLinearSlideMotor.getCurrentPosition() - leftLinearSlideMotor.
-        */
     }
 
-    /*
     public double PIDControl(double reference, double state) {
 
         double lastError = 0;
@@ -91,5 +101,27 @@ public class NovaMechanismTesting extends LinearOpMode {
         return output;
     }
 
-     */
 }
+
+/*
+        //go to fixed pos of linear slide
+        boolean linear_moving = true;
+        int distance_to_move = leftLinearSlideMotor.getCurrentPosition() - leftLinearSlideMotor.
+
+
+
+            The following code can be used for other additional gamepad functionality
+            that tests the pocket motion:
+
+            if (gamepad2.b) {
+                // 90 degrees
+                pocket.setDirection(Servo.Direction.REVERSE);
+                pocket.setPosition(0.3);
+            }
+            if (gamepad2.x) {
+                // 0 degrees - POCKET CLOSED
+                pocket.setDirection(Servo.Direction.REVERSE);
+                pocket.setPosition(0);
+            }
+
+             */
