@@ -20,10 +20,10 @@ import java.util.List;
 @TeleOp(name = "Concept: TensorFlow Object Detection Easy", group = "Concept")
 
 // all using 'easy' method right now
-public class Webcam {
+public class Webcam extends LinearOpMode{
 
     private static final boolean USE_WEBCAM = true;
-    private TfodProcessor tfod = TfodProcessor.easyCreateWithDefaults();
+    private TfodProcessor tfod;
 
     private void initTfod() {
 
@@ -74,6 +74,10 @@ public class Webcam {
             telemetry.addData("- Size", "%.0f x %.0f", recognition.getWidth(), recognition.getHeight());
         }
 
+    }
+
+    public void runOpMode(){
+        return;
     }
 
 }
