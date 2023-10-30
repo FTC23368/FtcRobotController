@@ -2,8 +2,6 @@ package org.firstinspires.ftc.teamcode;
 
 // imported for CPU efficiency
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad1;
-// imported because there was an error earlier and this was the suggested fix (in telemetryTfod())
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
