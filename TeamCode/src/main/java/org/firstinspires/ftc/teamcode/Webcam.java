@@ -27,12 +27,12 @@ public class Webcam extends LinearOpMode{
     private void initTfod() {
 
         // Create the TensorFlow processor the easy way
-        TfodProcessor tfod = TfodProcessor.easyCreateWithDefaults();
+        tfod = TfodProcessor.easyCreateWithDefaults();
 
         // creating vision portal
         if (USE_WEBCAM) {
             VisionPortal visionPortal = VisionPortal.easyCreateWithDefaults(
-                    HardwareMap.get(WebcamName.class, "Webcam 1"), tfod);
+                    hardwareMap.get(WebcamName.class, "Webcam 1"), tfod);
         } else {
             VisionPortal visionPortal = VisionPortal.easyCreateWithDefaults(
                     BuiltinCameraDirection.BACK, tfod);
