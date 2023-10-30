@@ -15,6 +15,7 @@ import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 import java.util.List;
 
+
 @TeleOp(name = "Concept: TensorFlow Object Detection Easy", group = "Concept")
 
 // all using 'easy' method right now
