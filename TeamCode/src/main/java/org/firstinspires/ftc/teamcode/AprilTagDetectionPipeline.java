@@ -19,6 +19,13 @@
  * SOFTWARE.
  */
 
+
+/**
+ * WE DO NOT NEED THIS CLASS
+ * but don't delete it yet, i'm still working through the actual class
+ * - ilakshi
+ */
+
 package org.firstinspires.ftc.teamcode;
 
 import org.opencv.calib3d.Calib3d;

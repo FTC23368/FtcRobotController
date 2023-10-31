@@ -20,8 +20,14 @@
  */
 
 
+/**
+ * WE DO NOT NEED THIS CLASS
+ * but don't delete it yet, i'm still working through the actual class
+ * - ilakshi
+ **/
+
 /*
-    AUTONOMOUS CODE NEEDS TO BE ADDED
+    AUTONOMOUS CODE NEEDS TO BE ADDED BY US
     only a sort of template in this class with helper methods
 */
 
@@ -63,6 +69,7 @@ public class AprilTagAutonomousInitDetectionExample extends LinearOpMode
     // UNITS ARE METERS
     double tagsize = 0.166;
 
+    // might possibly need to change tag id to tags we want
     int ID_TAG_OF_INTEREST = 18; // Tag ID 18 from the 36h11 family
 
     AprilTagDetection tagOfInterest = null;
