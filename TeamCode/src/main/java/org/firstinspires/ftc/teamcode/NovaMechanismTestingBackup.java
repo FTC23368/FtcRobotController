@@ -6,12 +6,10 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
-import com.qualcomm.robotcore.hardware.Gamepad;
 
 @TeleOp
-public class NovaMechanismTesting extends LinearOpMode {
+public class NovaMechanismTestingBackup extends LinearOpMode {
 
     public DcMotor leftSliderMotor;
     public DcMotor rightSliderMotor;
