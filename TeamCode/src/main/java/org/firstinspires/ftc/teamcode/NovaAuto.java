@@ -7,9 +7,6 @@ import org.openftc.apriltag.AprilTagDetection;
 
 @Autonomous
 public class NovaAuto {
-    Webcam webcam = new Webcam();
-    private AprilTagDetection aprilTagDetector = new AprilTagDetection();
-
 
 
 }
