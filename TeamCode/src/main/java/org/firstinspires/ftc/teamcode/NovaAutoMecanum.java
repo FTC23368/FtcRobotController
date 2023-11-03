@@ -76,19 +76,19 @@ public class NovaAutoMecanum extends LinearOpMode {
 
         while (opModeIsActive()){
             // Main Game play for our Autonomous Mode
-            moveForward(-100, slow);
+            moveForward(-10, slow);
             turnClockwise(180, slow);
             // Look for Pixels and get Direction
             int direction = getDirectionOfPixel();
             if (direction == -1) {
                 turnClockwise(-150, slow);
-                moveForward(-50, slow);
+                moveForward(-5, slow);
             } else if (direction == 1) {
                 turnClockwise(-210, slow);
-                moveForward(-50, slow);
+                moveForward(-5, slow);
             } else {
                 turnClockwise(-180, slow);
-                moveForward(-80, slow);
+                moveForward(-8, slow);
             }
             moveForward(100, slow);
         }
@@ -100,17 +100,24 @@ public class NovaAutoMecanum extends LinearOpMode {
     private void moveForward(int howMuch, double speed) {
         // howMuch is in inches. A negative howMuch moves backward.
 
+        telemetry.addLine("Trying to Move Foward");
+        telemetry.update();
+
         // fetch motor positions
         lfPos = leftFrontMotor.getCurrentPosition();
         rfPos = rightFrontMotor.getCurrentPosition();
         lrPos = leftRearMotor.getCurrentPosition();
         rrPos = rightRearMotor.getCurrentPosition();
+        telemetry.addLine("Current Positions: LF:" + lfPos + "; RF: " + rfPos);
+        telemetry.update();
 
         // calculate new targets
         lfPos += howMuch * clicksPerInch;
         rfPos += howMuch * clicksPerInch;
         lrPos += howMuch * clicksPerInch;
         rrPos += howMuch * clicksPerInch;
+        telemetry.addLine("Target Positions: LF:" + lfPos + "; RF: " + rfPos);
+        telemetry.update();
 
         // move robot to new position
         leftFrontMotor.setTargetPosition(lfPos);
@@ -191,17 +198,24 @@ public class NovaAutoMecanum extends LinearOpMode {
     private void turnClockwise(int whatAngle, double speed) {
         // whatAngle is in degrees. A negative whatAngle turns counterclockwise.
 
+        telemetry.addLine("Inside turnClockwise");
+        telemetry.update();
+
         // fetch motor positions
         lfPos = leftFrontMotor.getCurrentPosition();
         rfPos = rightFrontMotor.getCurrentPosition();
         lrPos = leftRearMotor.getCurrentPosition();
         rrPos = rightRearMotor.getCurrentPosition();
+        telemetry.addLine("Current Positions: LF:" + lfPos + "; RF: " + rfPos);
+        telemetry.update();
 
         // calculate new targets
         lfPos += whatAngle * clicksPerDeg;
         rfPos -= whatAngle * clicksPerDeg;
         lrPos += whatAngle * clicksPerDeg;
         rrPos -= whatAngle * clicksPerDeg;
+        telemetry.addLine("Target Angles: LF:" + lfPos + "; RF: " + rfPos);
+        telemetry.update();
 
         // move robot to new position
         leftFrontMotor.setTargetPosition(lfPos);
