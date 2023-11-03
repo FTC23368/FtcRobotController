@@ -17,10 +17,10 @@ import org.firstinspires.ftc.vision.VisionPortal;
 import java.util.List;
 
 @Autonomous
-public class NovaAutoMecanum extends LinearOpMode{
+public class NovaAutoMecanum extends LinearOpMode {
 
     // Declare Devices
-    DcMotor leftFrontMotor = null,  rightFrontMotor = null, leftRearMotor = null, rightRearMotor = null;
+    DcMotor leftFrontMotor = null, rightFrontMotor = null, leftRearMotor = null, rightRearMotor = null;
 
     // drive motor position variables
     private int lfPos, rfPos, lrPos, rrPos;
@@ -35,7 +35,7 @@ public class NovaAutoMecanum extends LinearOpMode{
     private VisionPortal visionPortal;
     private TfodProcessor tfod;
 
-    public void initForAutonomousMode(){
+    public void initForAutonomousMode() {
         // Initialize the Motors
         leftFrontMotor = hardwareMap.dcMotor.get("frontLeftMotor");
         rightFrontMotor = hardwareMap.dcMotor.get("frontRightMotor");
@@ -53,10 +53,10 @@ public class NovaAutoMecanum extends LinearOpMode{
         rightFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftRearMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightRearMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftFrontMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightFrontMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        leftRearMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightRearMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        //leftFrontMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        //rightFrontMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        //leftRearMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        //rightRearMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         // Initialize the TFOD and set to accept Recognitions with 75% confidence
         tfod = TfodProcessor.easyCreateWithDefaults();
@@ -74,23 +74,28 @@ public class NovaAutoMecanum extends LinearOpMode{
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
-        // Main Game play for our Autonomous Mode
-        moveForward(-10, slow);
-        turnClockwise(180, slow);
-        // Look for Pixels and get Direction
-        int direction = getDirectionOfPixel();
-        if (direction == -1){
-            turnClockwise(-150, slow);
-            moveForward(-5, slow);
-        } else if (direction == 1){
-            turnClockwise(-210, slow);
-            moveForward(-5, slow);
-        } else {
-            turnClockwise(-180, slow);
-            moveForward(-8, slow);
+        while (opModeIsActive()){
+            // Main Game play for our Autonomous Mode
+            moveForward(-100, slow);
+            turnClockwise(180, slow);
+            // Look for Pixels and get Direction
+            int direction = getDirectionOfPixel();
+            if (direction == -1) {
+                turnClockwise(-150, slow);
+                moveForward(-50, slow);
+            } else if (direction == 1) {
+                turnClockwise(-210, slow);
+                moveForward(-50, slow);
+            } else {
+                turnClockwise(-180, slow);
+                moveForward(-80, slow);
+            }
+            moveForward(100, slow);
         }
-        moveForward(10, slow);
+
     }
+
+
 
     private void moveForward(int howMuch, double speed) {
         // howMuch is in inches. A negative howMuch moves backward.
@@ -119,7 +124,7 @@ public class NovaAutoMecanum extends LinearOpMode{
 
         // wait for move to complete
         while (leftFrontMotor.isBusy() && rightFrontMotor.isBusy() &&
-                leftRearMotor.isBusy() && rightRearMotor.isBusy()) {
+                leftRearMotor.isBusy() && rightRearMotor.isBusy() && opModeIsActive()) {
 
             // Display it for the driver.
             telemetry.addLine("Move Foward");
@@ -164,7 +169,7 @@ public class NovaAutoMecanum extends LinearOpMode{
 
         // wait for move to complete
         while (leftFrontMotor.isBusy() && rightFrontMotor.isBusy() &&
-                leftRearMotor.isBusy() && rightRearMotor.isBusy()) {
+                leftRearMotor.isBusy() && rightRearMotor.isBusy() && opModeIsActive()) {
 
             // Display it for the driver.
             telemetry.addLine("Strafe Right");
@@ -210,7 +215,7 @@ public class NovaAutoMecanum extends LinearOpMode{
 
         // wait for move to complete
         while (leftFrontMotor.isBusy() && rightFrontMotor.isBusy() &&
-                leftRearMotor.isBusy() && rightRearMotor.isBusy()) {
+                leftRearMotor.isBusy() && rightRearMotor.isBusy() && opModeIsActive()) {
 
             // Display it for the driver.
             telemetry.addLine("Turn Clockwise");
@@ -248,7 +253,7 @@ public class NovaAutoMecanum extends LinearOpMode{
 
     int getDirectionOfPixel() {
         List<Recognition> recognitions = tfod.getRecognitions();
-        while (recognitions.size() == 0) {
+        while (recognitions.size() == 0 && opModeIsActive()) {
             telemetry.addLine("Found 0 Recognitions, Moving by pre-determined amount");
             telemetry.update();
             moveForward(-5, slow);
