@@ -16,6 +16,7 @@ import org.firstinspires.ftc.vision.VisionPortal;
 
 import java.util.List;
 
+@Autonomous
 public class NovaAutoMecanum extends LinearOpMode{
 
     // Declare Devices
