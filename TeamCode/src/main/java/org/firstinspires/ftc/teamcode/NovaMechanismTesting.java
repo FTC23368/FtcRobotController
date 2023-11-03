@@ -16,6 +16,8 @@ public class NovaMechanismTesting extends LinearOpMode {
     public DcMotor leftSliderMotor;
     public DcMotor rightSliderMotor;
 
+    public DcMotor intakeMotor;
+
     public TouchSensor limitSwitch;
 
     public boolean isSliderMoving = false;
@@ -35,6 +37,7 @@ public class NovaMechanismTesting extends LinearOpMode {
             leftSliderMotor = hardwareMap.dcMotor.get("leftSliderMotor");
             rightSliderMotor = hardwareMap.dcMotor.get("rightSliderMotor");
             rightSliderMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+            intakeMotor = hardwareMap.dcMotor.get("intakeMotor");
 
 
         // TEMPORARY
@@ -83,6 +86,11 @@ public class NovaMechanismTesting extends LinearOpMode {
             // If A is pressed, sliders retract fully
                 if (gamepad2.a) {
                     pidMoveSliderToEncoderPosBrakeMode(0, .3, 100);
+                }
+
+            // If B is pressed, run intake
+                if (gamepad2.b) {
+                    intakeMotor.setPower(1);
                 }
         }
     }

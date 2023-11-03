@@ -41,9 +41,11 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDir
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.GainControl;
+import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
+import org.firstinspires.ftc.vision.tfod.TfodProcessor; //
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -115,6 +117,7 @@ public class NovaAuto extends LinearOpMode {
     private VisionPortal visionPortal;               // Used to manage the video source.
     private AprilTagProcessor aprilTag;              // Used for managing the AprilTag detection process.
     private AprilTagDetection desiredTag;     // Used to hold the data for a detected AprilTag
+    private TfodProcessor tfod; //
 
     @Override
     public void runOpMode() {
@@ -158,6 +161,8 @@ public class NovaAuto extends LinearOpMode {
 
             // Step through the list of detected tags and look for a matching tag
             List<AprilTagDetection> currentDetections = aprilTag.getDetections();
+            List<Recognition> recognitions = tfod.getRecognitions(); //
+            //double angle = recognitions.get(0).estimateAngleToObject(); //
             for (AprilTagDetection detection : currentDetections) {
                 // Look to see if we have size info on this tag.
                 if (detection.metadata != null) {
