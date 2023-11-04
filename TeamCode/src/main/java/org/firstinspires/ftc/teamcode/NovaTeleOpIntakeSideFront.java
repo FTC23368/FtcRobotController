@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 
 @TeleOp
-public class NovaTeleOp extends LinearOpMode {
+public class NovaTeleOpIntakeSideFront extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         // Declare our motors
@@ -16,13 +16,6 @@ public class NovaTeleOp extends LinearOpMode {
         DcMotor backLeftMotor = hardwareMap.dcMotor.get("backLeftMotor");
         DcMotor frontRightMotor = hardwareMap.dcMotor.get("frontRightMotor");
         DcMotor backRightMotor = hardwareMap.dcMotor.get("backRightMotor");
-
-        // Declare linear slide motors
-        /*
-        DcMotor leftLinearSlideMotor = hardwareMap.dcMotor.get("leftLinearSlideMotor");
-        telemetry.addData("Hardware: ", "Initialized");
-        DcMotor rightLinearSlideMotor = hardwareMap.dcMotor.get("rightLinearSlideMotor");
-        */
 
 
         // Reverse the right side motors. THIS IS WRONG FOR OUR SETUP!!!!!
