@@ -145,6 +145,8 @@ public class NovaAutoMecanum extends LinearOpMode {
         telemetry.addLine("Current Positions: LF:" + lfPos + "; RF: " + rfPos);
         telemetry.update();
 
+
+
 //        // calculate new targets
 //        lfPos += howMuch * clicksPerInch;
 //        rfPos += howMuch * clicksPerInch;
