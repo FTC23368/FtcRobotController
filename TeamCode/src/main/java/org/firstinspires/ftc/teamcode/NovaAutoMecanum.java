@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 
 // Imports for Computer Vision and TFOD recognition
@@ -37,30 +38,27 @@ public class NovaAutoMecanum extends LinearOpMode {
 
     public void initForAutonomousMode() {
         // Initialize the Motors
-        leftFrontMotor = hardwareMap.dcMotor.get("frontLeftMotor");
-        rightFrontMotor = hardwareMap.dcMotor.get("frontRightMotor");
-        leftRearMotor = hardwareMap.dcMotor.get("backLeftMotor");
-        rightRearMotor = hardwareMap.dcMotor.get("backRightMotor");
+        leftFrontMotor = hardwareMap.get(DcMotor.class, "frontLeftMotor");
+        rightFrontMotor = hardwareMap.get(DcMotor.class, "frontRightMotor");
+        leftRearMotor = hardwareMap.get(DcMotor.class, "backLeftMotor");
+        rightRearMotor = hardwareMap.get(DcMotor.class, "backRightMotor");
 
         // todo: Check which motors need to be Reversed and Correct below
-        rightFrontMotor.setDirection(DcMotor.Direction.REVERSE);
-        leftFrontMotor.setDirection(DcMotor.Direction.FORWARD);
-        rightRearMotor.setDirection(DcMotor.Direction.REVERSE);
-        leftRearMotor.setDirection(DcMotor.Direction.FORWARD);
+        //rightFrontMotor.setDirection(DcMotor.Direction.FORWARD);
+        //leftFrontMotor.setDirection(DcMotor.Direction.REVERSE);
+        //rightRearMotor.setDirection(DcMotor.Direction.FORWARD);
+        //leftRearMotor.setDirection(DcMotor.Direction.REVERSE);
 
         // Set the drive motor run modes:
         leftFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftRearMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightRearMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        //leftFrontMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        //rightFrontMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        //leftRearMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        //rightRearMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
 
         // Initialize the TFOD and set to accept Recognitions with 75% confidence
         tfod = TfodProcessor.easyCreateWithDefaults();
-        tfod.setMinResultConfidence(75);
+        //tfod.setMinResultConfidence(75);
         visionPortal = VisionPortal.easyCreateWithDefaults(
                 hardwareMap.get(WebcamName.class, "Webcam 1"), tfod);
     }
@@ -75,22 +73,24 @@ public class NovaAutoMecanum extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()){
+
+            telemetryTfod();
             // Main Game play for our Autonomous Mode
-            moveForward(-10, slow);
-            turnClockwise(180, slow);
-            // Look for Pixels and get Direction
-            int direction = getDirectionOfPixel();
-            if (direction == -1) {
-                turnClockwise(-150, slow);
-                moveForward(-5, slow);
-            } else if (direction == 1) {
-                turnClockwise(-210, slow);
-                moveForward(-5, slow);
-            } else {
-                turnClockwise(-180, slow);
-                moveForward(-8, slow);
-            }
-            moveForward(100, slow);
+//            moveForward(-10, slow);
+//            turnClockwise(180, slow);
+//            // Look for Pixels and get Direction
+//            int direction = getDirectionOfPixel();
+//            if (direction == -1) {
+//                turnClockwise(-150, slow);
+//                moveForward(-5, slow);
+//            } else if (direction == 1) {
+//                turnClockwise(-210, slow);
+//                moveForward(-5, slow);
+//            } else {
+//                turnClockwise(-180, slow);
+//                moveForward(-8, slow);
+//            }
+//            moveForward(10, slow);
         }
 
     }
@@ -124,10 +124,15 @@ public class NovaAutoMecanum extends LinearOpMode {
         rightFrontMotor.setTargetPosition(rfPos);
         leftRearMotor.setTargetPosition(lrPos);
         rightRearMotor.setTargetPosition(rrPos);
-        leftFrontMotor.setPower(speed);
+        leftFrontMotor.setPower(medium);
         rightFrontMotor.setPower(speed);
-        leftRearMotor.setPower(speed);
+        leftRearMotor.setPower(medium);
         rightRearMotor.setPower(speed);
+
+        leftFrontMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightFrontMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        leftRearMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightRearMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         // wait for move to complete
         while (leftFrontMotor.isBusy() && rightFrontMotor.isBusy() &&
@@ -136,7 +141,7 @@ public class NovaAutoMecanum extends LinearOpMode {
             // Display it for the driver.
             telemetry.addLine("Move Foward");
             telemetry.addData("Target", "%7d :%7d", lfPos, rfPos, lrPos, rrPos);
-            telemetry.addData("Actual", "%7d :%7d", leftFrontMotor.getCurrentPosition(),
+            telemetry.addData("Actual", "%7d :%7d %7d :%7d", leftFrontMotor.getCurrentPosition(),
                     rightFrontMotor.getCurrentPosition(), leftRearMotor.getCurrentPosition(),
                     rightRearMotor.getCurrentPosition());
             telemetry.update();
@@ -261,6 +266,7 @@ public class NovaAutoMecanum extends LinearOpMode {
             telemetry.addData("Image", "%s (%.0f %% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100);
             telemetry.addData("- Position", "%.0f / %.0f", x, y);
             telemetry.addData("- Size", "%.0f x %.0f", recognition.getWidth(), recognition.getHeight());
+            telemetry.update();
         }   // end for() loop
 
     }   // end method telemetryTfod()
