@@ -73,6 +73,7 @@ public class NovaAutoMecanum extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()){
+            //moveRobot(10, 0, 0);
             moveForward(-10, slow);
             //telemetryTfod();
             // Main Game play for our Autonomous Mode
@@ -95,6 +96,39 @@ public class NovaAutoMecanum extends LinearOpMode {
 
     }
 
+    public void moveRobot(double x, double y, double yaw) {
+        // Calculate wheel powers.
+        double leftFrontPower    =  x -y -yaw;
+        double rightFrontPower   =  x +y +yaw;
+        double leftBackPower     =  x +y -yaw;
+        double rightBackPower    =  x -y +yaw;
+
+        // Normalize wheel powers to be less than 1.0
+        double max = Math.max(Math.abs(leftFrontPower), Math.abs(rightFrontPower));
+        max = Math.max(max, Math.abs(leftBackPower));
+        max = Math.max(max, Math.abs(rightBackPower));
+
+        if (max > 1.0) {
+            leftFrontPower /= max;
+            rightFrontPower /= max;
+            leftBackPower /= max;
+            rightBackPower /= max;
+        }
+
+        // Send powers to the wheels.
+        leftFrontMotor.setPower(leftFrontPower);
+        rightFrontMotor.setPower(rightFrontPower);
+        leftRearMotor.setPower(leftBackPower);
+        rightRearMotor.setPower(rightBackPower);
+
+        sleep(3000);
+
+        leftFrontMotor.setPower(0.0);
+        leftRearMotor.setPower(0.0);
+        rightRearMotor.setPower(0.0);
+        rightFrontMotor.setPower(0.0);
+    }
+
 
 
 
@@ -113,41 +147,45 @@ public class NovaAutoMecanum extends LinearOpMode {
         telemetry.addLine("Current Positions: LF:" + lfPos + "; RF: " + rfPos);
         telemetry.update();
 
-        // calculate new targets
-        lfPos += howMuch * clicksPerInch;
-        rfPos += howMuch * clicksPerInch;
-        lrPos += howMuch * clicksPerInch;
-        rrPos += howMuch * clicksPerInch;
-        telemetry.addLine("Target Positions: LF:" + lfPos + "; RF: " + rfPos);
-        telemetry.update();
 
-        // move robot to new position
-        leftFrontMotor.setTargetPosition(lfPos);
-        rightFrontMotor.setTargetPosition(rfPos);
-        leftRearMotor.setTargetPosition(lrPos);
-        rightRearMotor.setTargetPosition(rrPos);
+
+//        // calculate new targets
+//        lfPos += howMuch * clicksPerInch;
+//        rfPos += howMuch * clicksPerInch;
+//        lrPos += howMuch * clicksPerInch;
+//        rrPos += howMuch * clicksPerInch;
+//        telemetry.addLine("Target Positions: LF:" + lfPos + "; RF: " + rfPos);
+//        telemetry.update();
+
+//        // move robot to new position
+//        leftFrontMotor.setTargetPosition(lfPos);
+//        rightFrontMotor.setTargetPosition(rfPos);
+//        leftRearMotor.setTargetPosition(lrPos);
+//        rightRearMotor.setTargetPosition(rrPos);
         leftFrontMotor.setPower(0.1);
-        rightFrontMotor.setPower(0.5);
+        rightFrontMotor.setPower(0.1);
         leftRearMotor.setPower(0.1);
-        rightRearMotor.setPower(0.5);
+        rightRearMotor.setPower(0.1);
 
-        leftFrontMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightFrontMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        leftRearMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightRearMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        leftFrontMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        rightFrontMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        leftRearMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        rightRearMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//
+//        // wait for move to complete
+//        while (leftFrontMotor.isBusy() && rightFrontMotor.isBusy() &&
+//                leftRearMotor.isBusy() && rightRearMotor.isBusy() && opModeIsActive()) {
+//
+//            // Display it for the driver.
+//            telemetry.addLine("Move Foward");
+//            telemetry.addData("Target", "%7d :%7d", lfPos, rfPos, lrPos, rrPos);
+//            telemetry.addData("Actual", "%7d :%7d %7d :%7d", leftFrontMotor.getCurrentPosition(),
+//                    rightFrontMotor.getCurrentPosition(), leftRearMotor.getCurrentPosition(),
+//                    rightRearMotor.getCurrentPosition());
+//            telemetry.update();
+//        }
 
-        // wait for move to complete
-        while (leftFrontMotor.isBusy() && rightFrontMotor.isBusy() &&
-                leftRearMotor.isBusy() && rightRearMotor.isBusy() && opModeIsActive()) {
-
-            // Display it for the driver.
-            telemetry.addLine("Move Foward");
-            telemetry.addData("Target", "%7d :%7d", lfPos, rfPos, lrPos, rrPos);
-            telemetry.addData("Actual", "%7d :%7d %7d :%7d", leftFrontMotor.getCurrentPosition(),
-                    rightFrontMotor.getCurrentPosition(), leftRearMotor.getCurrentPosition(),
-                    rightRearMotor.getCurrentPosition());
-            telemetry.update();
-        }
+        sleep(3000);
 
         // Stop all motion;
         leftFrontMotor.setPower(0);
@@ -216,19 +254,19 @@ public class NovaAutoMecanum extends LinearOpMode {
         telemetry.addLine("Current Positions: LF:" + lfPos + "; RF: " + rfPos);
         telemetry.update();
 
-        // calculate new targets
-        lfPos += whatAngle * clicksPerDeg;
-        rfPos -= whatAngle * clicksPerDeg;
-        lrPos += whatAngle * clicksPerDeg;
-        rrPos -= whatAngle * clicksPerDeg;
-        telemetry.addLine("Target Angles: LF:" + lfPos + "; RF: " + rfPos);
-        telemetry.update();
-
-        // move robot to new position
-        leftFrontMotor.setTargetPosition(lfPos);
-        rightFrontMotor.setTargetPosition(rfPos);
-        leftRearMotor.setTargetPosition(lrPos);
-        rightRearMotor.setTargetPosition(rrPos);
+//        // calculate new targets
+//        lfPos += whatAngle * clicksPerDeg;
+//        rfPos -= whatAngle * clicksPerDeg;
+//        lrPos += whatAngle * clicksPerDeg;
+//        rrPos -= whatAngle * clicksPerDeg;
+//        telemetry.addLine("Target Angles: LF:" + lfPos + "; RF: " + rfPos);
+//        telemetry.update();
+//
+//        // move robot to new position
+//        leftFrontMotor.setTargetPosition(lfPos);
+//        rightFrontMotor.setTargetPosition(rfPos);
+//        leftRearMotor.setTargetPosition(lrPos);
+//        rightRearMotor.setTargetPosition(rrPos);
         leftFrontMotor.setPower(speed);
         rightFrontMotor.setPower(speed);
         leftRearMotor.setPower(speed);
