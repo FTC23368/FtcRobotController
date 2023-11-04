@@ -32,6 +32,8 @@ public class NovaTeleOpPocketSideFront extends LinearOpMode {
 
         Servo pocket = hardwareMap.servo.get("pocket");
 
+        limitSwitch = hardwareMap.touchSensor.get("limitSwitch");
+
         boolean previousButtonState = false;
         boolean motorToggle = false;
 
@@ -73,6 +75,7 @@ public class NovaTeleOpPocketSideFront extends LinearOpMode {
             double y = -gamepad1.left_stick_y; // Remember, Y stick value is reversed
             double x = gamepad1.left_stick_x * 1.1; // Counteract imperfect strafing
             double rx = gamepad1.right_stick_x;
+            telemetry.addLine("Current Positions: X: " + x + "; Y: " + y + "; RX: " + rx);
 
             // Denominator is the largest motor power (absolute value) or 1
             // This ensures all the powers maintain the same ratio,
@@ -82,6 +85,10 @@ public class NovaTeleOpPocketSideFront extends LinearOpMode {
             double backLeftPower = (y - x + rx) / denominator;
             double frontRightPower = (y - x - rx) / denominator;
             double backRightPower = (y + x - rx) / denominator;
+            telemetry.addLine("Denominator: " + denominator);
+            telemetry.addLine("FL, FR, BL, BR Power: " + frontLeftPower + "," + frontRightPower
+                    + "," + backLeftPower + "," + backRightPower);
+            telemetry.update();
 
             frontLeftMotor.setPower(frontLeftPower);
             backLeftMotor.setPower(backLeftPower);
@@ -113,6 +120,7 @@ public class NovaTeleOpPocketSideFront extends LinearOpMode {
             // If dpad down is pressed, sliders fully retract
             if (gamepad2.dpad_down) {
                 pidMoveSliderToEncoderPosBrakeMode(0, .3, 100);
+                resetSliderEncoderWithLimitSwitch();
             }
 
             // POCKET MOVEMENT --------------------------------------------------------------------|

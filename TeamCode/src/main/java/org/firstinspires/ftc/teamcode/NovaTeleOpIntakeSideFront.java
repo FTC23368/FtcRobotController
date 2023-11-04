@@ -32,6 +32,8 @@ public class NovaTeleOpIntakeSideFront extends LinearOpMode {
 
         Servo pocket = hardwareMap.servo.get("pocket");
 
+        limitSwitch = hardwareMap.touchSensor.get("limitSwitch");
+
         boolean previousButtonState = false;
         boolean motorToggle = false;
 
@@ -108,19 +110,17 @@ public class NovaTeleOpIntakeSideFront extends LinearOpMode {
             // If dpad left is pressed, sliders up to medium height
                 if (gamepad2.dpad_left) {
                     pidMoveSliderToEncoderPosBrakeMode(1500, .4, 100);
-                    gamepad2.dpad_left = false;
                 }
 
                 // If dpad up is pressed, sliders up to high height
                 if (gamepad2.dpad_up) {
                     pidMoveSliderToEncoderPosBrakeMode(1800, .4, 100);
-                    gamepad2.dpad_up = false;
                 }
 
                 // If dpad down is pressed, sliders fully retract
                 if (gamepad2.dpad_down) {
                     pidMoveSliderToEncoderPosBrakeMode(0, .3, 100);
-                    gamepad2.dpad_down = false;
+                    resetSliderEncoderWithLimitSwitch();
                 }
 
             // POCKET MOVEMENT --------------------------------------------------------------------|
