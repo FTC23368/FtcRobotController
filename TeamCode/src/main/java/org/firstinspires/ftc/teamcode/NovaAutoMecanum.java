@@ -73,10 +73,10 @@ public class NovaAutoMecanum extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()){
-
-            telemetryTfod();
+            moveForward(-10, slow);
+            //telemetryTfod();
             // Main Game play for our Autonomous Mode
-//            moveForward(-10, slow);
+
 //            turnClockwise(180, slow);
 //            // Look for Pixels and get Direction
 //            int direction = getDirectionOfPixel();
@@ -124,10 +124,10 @@ public class NovaAutoMecanum extends LinearOpMode {
         rightFrontMotor.setTargetPosition(rfPos);
         leftRearMotor.setTargetPosition(lrPos);
         rightRearMotor.setTargetPosition(rrPos);
-        leftFrontMotor.setPower(medium);
-        rightFrontMotor.setPower(speed);
-        leftRearMotor.setPower(medium);
-        rightRearMotor.setPower(speed);
+        leftFrontMotor.setPower(0.1);
+        rightFrontMotor.setPower(0.5);
+        leftRearMotor.setPower(0.1);
+        rightRearMotor.setPower(0.5);
 
         leftFrontMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightFrontMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
