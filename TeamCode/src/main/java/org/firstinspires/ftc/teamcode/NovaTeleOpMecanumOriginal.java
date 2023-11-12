@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 
 @TeleOp
-public class NovaTeleOpBackup extends LinearOpMode {
+public class NovaTeleOpMecanumOriginal extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         // Declare our motors

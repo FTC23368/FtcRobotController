@@ -124,7 +124,7 @@ public class NovaTeleOpIntakeSideFront extends LinearOpMode {
                 if (gamepad2.dpad_left) {
                     telemetry.addLine("dpad_left has been pressed");
                     telemetry.update();
-                    pidMoveSliderToEncoderPosBrakeMode(1500, .4, 100);
+                    pidMoveSliderToEncoderPosBrakeMode(1500, .5, 100);
                 }
 
                 // If dpad up is pressed, sliders up to high height
