@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
 
@@ -42,7 +43,6 @@ public class NovaTeleOpIntakeSideFront extends LinearOpMode {
         rightSliderMotor = hardwareMap.dcMotor.get("rightSliderMotor");
         rightSliderMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
-
         // These lines reset the encoder and do the job of the limit switch method
         leftSliderMotor.setPower(0);
         rightSliderMotor.setPower(0);
@@ -72,9 +72,22 @@ public class NovaTeleOpIntakeSideFront extends LinearOpMode {
 
         while (opModeIsActive()) {
             // DRIVEBASE MOVEMENT -----------------------------------------------------------------|
-                double y = -gamepad1.left_stick_y; // Remember, Y stick value is reversed
-                double x = gamepad1.left_stick_x * 1.1; // Counteract imperfect strafing
-                double rx = gamepad1.right_stick_x;
+            double x,y,rx;
+            if (-gamepad1.left_stick_x < 0.5) {
+                 x = (gamepad1.left_stick_x * 1.1)*0.6; // Counteract imperfect strafing
+            } else {
+                x = gamepad1.left_stick_x;
+            }
+            if (-gamepad1.left_stick_y < 0.5) {
+                y = (gamepad1.left_stick_y )*0.6; // Counteract imperfect strafing
+            } else {
+                y = gamepad1.left_stick_y;
+            }
+            if (-gamepad1.right_stick_x < 0.5) {
+                rx = (gamepad1.right_stick_x)*0.6; // Counteract imperfect strafing
+            } else {
+                rx = gamepad1.right_stick_x;
+            }
                 telemetry.addLine("Current Positions: X: " + x + "; Y: " + y + "; RX: " + rx);
 
                 // Denominator is the largest motor power (absolute value) or 1
@@ -109,18 +122,19 @@ public class NovaTeleOpIntakeSideFront extends LinearOpMode {
             // LINEAR SLIDES MOVEMENT -------------------------------------------------------------|
             // If dpad left is pressed, sliders up to medium height
                 if (gamepad2.dpad_left) {
+                    telemetry.addLine("dpad_left has been pressed");
+                    telemetry.update();
                     pidMoveSliderToEncoderPosBrakeMode(1500, .4, 100);
                 }
 
                 // If dpad up is pressed, sliders up to high height
-                if (gamepad2.dpad_up) {
+                /*if (gamepad2.dpad_up) {
                     pidMoveSliderToEncoderPosBrakeMode(1800, .4, 100);
-                }
+                }*/
 
                 // If dpad down is pressed, sliders fully retract
                 if (gamepad2.dpad_down) {
-                    pidMoveSliderToEncoderPosBrakeMode(0, .3, 100);
-                    resetSliderEncoderWithLimitSwitch();
+                    pidMoveSliderToEncoderPosBrakeMode(5, .3, 100);
                 }
 
             // POCKET MOVEMENT --------------------------------------------------------------------|
@@ -132,7 +146,6 @@ public class NovaTeleOpIntakeSideFront extends LinearOpMode {
                     // 0 degrees - POCKET CLOSED
                     pocket.setPosition(0.25);
                 }
-
         }
     }
 
@@ -144,10 +157,15 @@ public class NovaTeleOpIntakeSideFront extends LinearOpMode {
 
             getCurrentSliderEncoderPos();
 
+            telemetry.addLine(targetEncoderPos + "," + leftSliderMotor.getCurrentPosition());
+            telemetry.update();
+
             if (targetEncoderPos > leftSliderMotor.getCurrentPosition()) {
                 pidSliderMoveUpBrakeMode(targetEncoderPos, power, slowDownEncoderPos);
             } else if (targetEncoderPos < leftSliderMotor.getCurrentPosition()) {
                 pidSliderMoveDownBrakeMode(targetEncoderPos, power, slowDownEncoderPos);
+                telemetry.addLine("Current Position: " + leftSliderMotor.getCurrentPosition());
+                telemetry.update();
             }
 
             isSliderMoving = false;
