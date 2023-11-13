@@ -18,7 +18,7 @@ public class NovaTeleOpDroneTwo extends LinearOpMode{
         // if 'a' pressed set power to full
         while(opModeIsActive()){
             if (gamepad1.a){
-                drone.setPosition(0.5);
+                drone.setPosition(1);
             }
         }
     }
