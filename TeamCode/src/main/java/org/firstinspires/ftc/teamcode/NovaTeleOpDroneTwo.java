@@ -10,8 +10,8 @@ public class NovaTeleOpDroneTwo extends LinearOpMode{
 
     public void runOpMode(){
 
-        // declaring the servo
         Servo drone = hardwareMap.servo.get("drone");
+        // declaring the servo
 
         waitForStart();
 
