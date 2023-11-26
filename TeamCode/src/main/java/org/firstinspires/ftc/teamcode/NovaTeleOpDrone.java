@@ -2,31 +2,27 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.DcMotor;
-
+import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp
-public class NovaTeleOpDrone extends LinearOpMode {
-    @Override
-    public void runOpMode() throws InterruptedException {
-        // Declare our motors
-        // Make sure your ID's match your configuration
-        CRServo leftDrone = hardwareMap.crservo.get("leftDrone");
-        CRServo rightDrone = hardwareMap.crservo.get("rightDrone");
+public class NovaTeleOpDrone extends LinearOpMode{
+
+    public void runOpMode(){
+
+        Servo drone = hardwareMap.servo.get("drone");
+        // declaring the servo
 
         waitForStart();
 
-        if (isStopRequested()) return;
-
-        while (opModeIsActive()) {
-           if (gamepad2.a) {
-               leftDrone.setPower(1);
-               rightDrone.setPower(-1);
-           }
+        // if 'a' pressed set power to full
+        while(opModeIsActive()){
+            if (gamepad1.a){
+                // Drone launched
+                drone.setPosition(0.08);
+                sleep(3000);
+                drone.setPosition(0.02);
+            }
         }
-
     }
-
 
 }

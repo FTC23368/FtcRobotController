@@ -50,8 +50,8 @@ import java.util.List;
  */
 @TeleOp
 
-public class NovaTensorFlowTeamPropDetection extends LinearOpMode {
-    private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
+public class NovaTensorFlowTeamPropDetectionCopy extends LinearOpMode {
+    public static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
 
     // TFOD_MODEL_ASSET points to a model file stored in the project Asset location,
     // this is only used for Android Studio when using models in Assets.
@@ -61,7 +61,7 @@ public class NovaTensorFlowTeamPropDetection extends LinearOpMode {
     private static final String TFOD_MODEL_FILE = "/sdcard/FIRST/tflitemodels/myCustomModel.tflite";
     // Define the labels recognized in the model for TFOD (must be in training order!)
     private static final String[] LABELS = {
-       "blue", "red", "none"
+            "blue", "red", "none"
     };
 
     /**
@@ -113,28 +113,28 @@ public class NovaTensorFlowTeamPropDetection extends LinearOpMode {
     /**
      * Initialize the TensorFlow Object Detection processor.
      */
-    private void initTfod() {
+    public void initTfod() {
 
         // Create the TensorFlow processor by using a builder.
         tfod = new TfodProcessor.Builder()
 
-            // With the following lines commented out, the default TfodProcessor Builder
-            // will load the default model for the season. To define a custom model to load, 
-            // choose one of the following:
-            //   Use setModelAssetName() if the custom TF Model is built in as an asset (AS only).
-            //   Use setModelFileName() if you have downloaded a custom team model to the Robot Controller.\
-            .setModelAssetName(TFOD_MODEL_ASSET)
-            //.setModelFileName(TFOD_MODEL_FILE)
+                // With the following lines commented out, the default TfodProcessor Builder
+                // will load the default model for the season. To define a custom model to load,
+                // choose one of the following:
+                //   Use setModelAssetName() if the custom TF Model is built in as an asset (AS only).
+                //   Use setModelFileName() if you have downloaded a custom team model to the Robot Controller.\
+                .setModelAssetName(TFOD_MODEL_ASSET)
+                //.setModelFileName(TFOD_MODEL_FILE)
 
-            // The following default settings are available to un-comment and edit as needed to 
-            // set parameters for custom models.
-            .setModelLabels(LABELS)
-            .setIsModelTensorFlow2(true)
-            .setIsModelQuantized(true)
-            .setModelInputSize(480)
-            .setModelAspectRatio(16.0 / 9.0)
+                // The following default settings are available to un-comment and edit as needed to
+                // set parameters for custom models.
+                .setModelLabels(LABELS)
+                .setIsModelTensorFlow2(true)
+                .setIsModelQuantized(true)
+                .setModelInputSize(480)
+                .setModelAspectRatio(16.0 / 9.0)
 
-            .build();
+                .build();
 
         // Create the vision portal by using a builder.
         VisionPortal.Builder builder = new VisionPortal.Builder();
@@ -177,7 +177,7 @@ public class NovaTensorFlowTeamPropDetection extends LinearOpMode {
     /**
      * Add telemetry about TensorFlow Object Detection (TFOD) recognitions.
      */
-    private void telemetryTfod() {
+    public boolean telemetryTfod() {
 
         List<Recognition> currentRecognitions = tfod.getRecognitions();
         telemetry.addData("# Objects Detected", currentRecognitions.size());
@@ -193,6 +193,15 @@ public class NovaTensorFlowTeamPropDetection extends LinearOpMode {
             telemetry.addData("- Size", "%.0f x %.0f", recognition.getWidth(), recognition.getHeight());
         }   // end for() loop
 
+        if (currentRecognitions.get(0).getLabel() == "red" || currentRecognitions.get(0).getLabel() == "blue") {
+            telemetry.addData("Object Detected: ", "Yes");
+            telemetry.update();
+            return true;
+        } else {
+            telemetry.addData("ObjectDetected: ", "No");
+            telemetry.update();
+            return false;
+        }
     }   // end method telemetryTfod()
 
 }   // end class

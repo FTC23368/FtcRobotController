@@ -5,15 +5,20 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
+import java.util.List;
+
+import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 
 // BACKDROP SIDE
 
 @Autonomous
-public class NovaAutoBackdropSideBlue extends LinearOpMode {
+public class NovaAutoBackdropSideBlueCopy extends LinearOpMode {
 
     public DcMotor leftSliderMotor;
     public DcMotor rightSliderMotor;
     public DcMotor frontLeftMotor, backLeftMotor, frontRightMotor, backRightMotor;
+    private ElapsedTime runtime = new ElapsedTime();
 
     public boolean isSliderMoving = false;
     public int propPosition = 0;
@@ -52,13 +57,33 @@ public class NovaAutoBackdropSideBlue extends LinearOpMode {
         telemetry.update();
 
         waitForStart();
+        runtime.reset();
 
-        while(opModeIsActive()){
             // move forward (depends on model)
-            move(0.3, 0.3, 0.3, 0.3);
-            Thread.sleep(500);
-            move(0.0, 0.0, 0.0, 0.0);
+            frontLeftMotor.setPower(0.3);
+            backLeftMotor.setPower(0.3);
+            frontRightMotor.setPower(0.3);
+            backRightMotor.setPower(0.3);
+            sleep(1075);
+            frontLeftMotor.setPower(0);
+            backLeftMotor.setPower(0);
+            frontRightMotor.setPower(0);
+            backRightMotor.setPower(0);
             // use tfod model to find prop on tape
+            NovaTensorFlowTeamPropDetectionCopy tfod = new NovaTensorFlowTeamPropDetectionCopy();
+            tfod.initTfod();
+
+            if (tfod.telemetryTfod() == true) {
+                frontLeftMotor.setPower(0.3);
+                backLeftMotor.setPower(0.3);
+                frontRightMotor.setPower(0.3);
+                backRightMotor.setPower(0.3);
+                sleep(300);
+                frontLeftMotor.setPower(0);
+                backLeftMotor.setPower(0);
+                frontRightMotor.setPower(0);
+                backRightMotor.setPower(0);
+            }
             // go forward x inches, place pixel and then back
 
             // turn counterclockwise 90 deg in place
@@ -115,15 +140,6 @@ public class NovaAutoBackdropSideBlue extends LinearOpMode {
             // stop*/
         }
 
-    }
-
-    /** BASIC MOVEMENT METHODS */
-    public void move(double fL, double bL, double fR, double bR) {
-        frontLeftMotor.setPower(fL);
-        backLeftMotor.setPower(bL);
-        frontRightMotor.setPower(fR);
-        backRightMotor.setPower(bR);
-    }
 
     /** PID METHODS */
 
