@@ -3,87 +3,50 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
-import java.util.List;
 
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+
+import java.util.List;
 
 // BACKDROP SIDE
 
 @Autonomous
 public class NovaAutoBackdropSideBlueCopy extends LinearOpMode {
 
-    public DcMotor leftSliderMotor;
-    public DcMotor rightSliderMotor;
-    public DcMotor frontLeftMotor, backLeftMotor, frontRightMotor, backRightMotor;
-    private ElapsedTime runtime = new ElapsedTime();
+    NovaBot novaBot;
 
-    public boolean isSliderMoving = false;
-    public int propPosition = 0;
-    //1 = left, 2 = middle, 3 = right
-
-    double currentPos = 0;
     @Override
     public void runOpMode() throws InterruptedException {
 
-        frontLeftMotor = hardwareMap.dcMotor.get("frontLeftMotor");
-        backLeftMotor = hardwareMap.dcMotor.get("backLeftMotor");
-        frontRightMotor = hardwareMap.dcMotor.get("frontRightMotor");
-        backRightMotor = hardwareMap.dcMotor.get("backRightMotor");
-
-        frontLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        backLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        frontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        backRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        frontLeftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        frontRightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        backRightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        backLeftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-        DcMotor intakeMotor;
-        intakeMotor = hardwareMap.dcMotor.get("intakeMotor");
-
-        Servo pocket = hardwareMap.servo.get("pocket");
-
-        leftSliderMotor = hardwareMap.dcMotor.get("leftSliderMotor");
-        rightSliderMotor = hardwareMap.dcMotor.get("rightSliderMotor");
-        rightSliderMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-
-
-        telemetry.addData("Status: ", "Robot Initialized");
-        telemetry.update();
+        novaBot = new NovaBot(this);
+        novaBot.initNovaBot();
 
         waitForStart();
-        runtime.reset();
+        novaBot.runtime.reset();
 
             // move forward (depends on model)
-            frontLeftMotor.setPower(0.3);
-            backLeftMotor.setPower(0.3);
-            frontRightMotor.setPower(0.3);
-            backRightMotor.setPower(0.3);
+            novaBot.frontLeftMotor.setPower(0.3);
+            novaBot.backLeftMotor.setPower(0.3);
+            novaBot.frontRightMotor.setPower(0.3);
+            novaBot.backRightMotor.setPower(0.3);
             sleep(1075);
-            frontLeftMotor.setPower(0);
-            backLeftMotor.setPower(0);
-            frontRightMotor.setPower(0);
-            backRightMotor.setPower(0);
+            novaBot.frontLeftMotor.setPower(0);
+            novaBot.backLeftMotor.setPower(0);
+            novaBot.frontRightMotor.setPower(0);
+            novaBot.backRightMotor.setPower(0);
             // use tfod model to find prop on tape
-            NovaTensorFlowTeamPropDetectionCopy tfod = new NovaTensorFlowTeamPropDetectionCopy();
-            tfod.initTfod();
-
-            if (tfod.telemetryTfod() == true) {
-                frontLeftMotor.setPower(0.3);
-                backLeftMotor.setPower(0.3);
-                frontRightMotor.setPower(0.3);
-                backRightMotor.setPower(0.3);
+            if (isPropPresent()) {
+                novaBot.frontLeftMotor.setPower(0.3);
+                novaBot.backLeftMotor.setPower(0.3);
+                novaBot.frontRightMotor.setPower(0.3);
+                novaBot.backRightMotor.setPower(0.3);
                 sleep(300);
-                frontLeftMotor.setPower(0);
-                backLeftMotor.setPower(0);
-                frontRightMotor.setPower(0);
-                backRightMotor.setPower(0);
+                novaBot.frontLeftMotor.setPower(0);
+                novaBot.backLeftMotor.setPower(0);
+                novaBot.frontRightMotor.setPower(0);
+                novaBot.backRightMotor.setPower(0);
             }
+
             // go forward x inches, place pixel and then back
 
             // turn counterclockwise 90 deg in place
@@ -138,33 +101,51 @@ public class NovaAutoBackdropSideBlueCopy extends LinearOpMode {
             frontRightMotor.setPower(0);
             backRightMotor.setPower(0);
             // stop*/
+
+            novaBot.visionPortal.close();
         }
+
+
+    /**
+     * Add telemetry about TensorFlow Object Detection (TFOD) recognitions.
+     */
+    private boolean isPropPresent () {
+
+        List<Recognition> currentRecognitions = novaBot.tfod.getRecognitions();
+        int size = currentRecognitions.size();
+
+        if (size > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
 
     /** PID METHODS */
 
     public void pidMoveSliderToEncoderPosBrakeMode (int targetEncoderPos, double power, int slowDownEncoderPos) {
-        isSliderMoving = true;
+        novaBot.isSliderMoving = true;
 
         getCurrentSliderEncoderPos();
 
-        telemetry.addLine(targetEncoderPos + "," + leftSliderMotor.getCurrentPosition());
+        telemetry.addLine(targetEncoderPos + "," + novaBot.leftSliderMotor.getCurrentPosition());
         telemetry.update();
 
-        if (targetEncoderPos > leftSliderMotor.getCurrentPosition()) {
+        if (targetEncoderPos > novaBot.leftSliderMotor.getCurrentPosition()) {
             pidSliderMoveUpBrakeMode(targetEncoderPos, power, slowDownEncoderPos);
-        } else if (targetEncoderPos < leftSliderMotor.getCurrentPosition()) {
+        } else if (targetEncoderPos < novaBot.leftSliderMotor.getCurrentPosition()) {
             pidSliderMoveDownBrakeMode(targetEncoderPos, power, slowDownEncoderPos);
-            telemetry.addLine("Current Position: " + leftSliderMotor.getCurrentPosition());
+            telemetry.addLine("Current Position: " + novaBot.leftSliderMotor.getCurrentPosition());
             telemetry.update();
         }
 
-        isSliderMoving = false;
+        novaBot.isSliderMoving = false;
     }
 
     private void pidSliderMoveUpBrakeMode (int targetEncoderPos, double power, int slowDownEncoderPos) {
-        this.leftSliderMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightSliderMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        this.novaBot.leftSliderMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        novaBot.rightSliderMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         double encoderDiff;
         double kP = 0.01;
@@ -172,28 +153,28 @@ public class NovaAutoBackdropSideBlueCopy extends LinearOpMode {
         getCurrentSliderEncoderPos();
 
         while ((getCurrentSliderEncoderPos() <= targetEncoderPos - slowDownEncoderPos) && opModeIsActive()) {
-            encoderDiff = leftSliderMotor.getCurrentPosition() - rightSliderMotor.getCurrentPosition();
+            encoderDiff = novaBot.leftSliderMotor.getCurrentPosition() - novaBot.rightSliderMotor.getCurrentPosition();
 
             if (encoderDiff >= 0){
-                leftSliderMotor.setPower((power - kP * encoderDiff));
-                rightSliderMotor.setPower(power + kP * encoderDiff);
+                novaBot.leftSliderMotor.setPower((power - kP * encoderDiff));
+                novaBot.rightSliderMotor.setPower(power + kP * encoderDiff);
             } else {
-                rightSliderMotor.setPower((power + kP * encoderDiff));
-                leftSliderMotor.setPower(power - kP * encoderDiff);
+                novaBot.rightSliderMotor.setPower((power + kP * encoderDiff));
+                novaBot.leftSliderMotor.setPower(power - kP * encoderDiff);
             }
         }
 
 
         while (getCurrentSliderEncoderPos() <= targetEncoderPos && opModeIsActive()) {
-            encoderDiff = leftSliderMotor.getCurrentPosition() - rightSliderMotor.getCurrentPosition();
+            encoderDiff = novaBot.leftSliderMotor.getCurrentPosition() - novaBot.rightSliderMotor.getCurrentPosition();
             power = 0.3;
 
             if (encoderDiff >= 0) {
-                leftSliderMotor.setPower(power - kP *encoderDiff);
-                rightSliderMotor.setPower(power + kP * encoderDiff);
+                novaBot.leftSliderMotor.setPower(power - kP *encoderDiff);
+                novaBot.rightSliderMotor.setPower(power + kP * encoderDiff);
             } else {
-                rightSliderMotor.setPower(power + kP *encoderDiff);
-                leftSliderMotor.setPower(power-kP * encoderDiff);
+                novaBot.rightSliderMotor.setPower(power + kP *encoderDiff);
+                novaBot.leftSliderMotor.setPower(power-kP * encoderDiff);
             }
         }
 
@@ -202,45 +183,45 @@ public class NovaAutoBackdropSideBlueCopy extends LinearOpMode {
     }
 
     public int getCurrentSliderEncoderPos() {
-        return (leftSliderMotor.getCurrentPosition() + rightSliderMotor.getCurrentPosition()) / 2;
+        return (novaBot.leftSliderMotor.getCurrentPosition() + novaBot.rightSliderMotor.getCurrentPosition()) / 2;
     }
 
     public void holdSlider() {
-        rightSliderMotor.setPower(0.05);
-        leftSliderMotor.setPower(0.05);
+        novaBot.rightSliderMotor.setPower(0.05);
+        novaBot.leftSliderMotor.setPower(0.05);
     }
 
     private void pidSliderMoveDownBrakeMode (int targetEncoderPos, double power, int slowDownEncoderPos) {
-        leftSliderMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightSliderMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        novaBot.leftSliderMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        novaBot.rightSliderMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         double encoderDiff;
         double kP = 0.01;
         power = -power;
 
         while (getCurrentSliderEncoderPos() >= targetEncoderPos + slowDownEncoderPos && opModeIsActive()) {
-            encoderDiff = leftSliderMotor.getCurrentPosition() - rightSliderMotor.getCurrentPosition();
+            encoderDiff = novaBot.leftSliderMotor.getCurrentPosition() - novaBot.rightSliderMotor.getCurrentPosition();
 
             if (encoderDiff >= 0) {
-                leftSliderMotor.setPower(power - kP * encoderDiff);
-                rightSliderMotor.setPower(power + kP * encoderDiff);
+                novaBot.leftSliderMotor.setPower(power - kP * encoderDiff);
+                novaBot.rightSliderMotor.setPower(power + kP * encoderDiff);
             } else {
-                rightSliderMotor.setPower(power + kP * encoderDiff);
-                leftSliderMotor.setPower(power - kP * encoderDiff);
+                novaBot.rightSliderMotor.setPower(power + kP * encoderDiff);
+                novaBot.leftSliderMotor.setPower(power - kP * encoderDiff);
             }
         }
 
         while (getCurrentSliderEncoderPos() >= targetEncoderPos && opModeIsActive()) {
-            encoderDiff = leftSliderMotor.getCurrentPosition() - rightSliderMotor.getCurrentPosition();
+            encoderDiff = novaBot.leftSliderMotor.getCurrentPosition() - novaBot.rightSliderMotor.getCurrentPosition();
 
             power = -0.1;
 
             if (encoderDiff >= 0) {
-                leftSliderMotor.setPower(power - kP * encoderDiff);
-                rightSliderMotor.setPower(power + kP * encoderDiff);
+                novaBot.leftSliderMotor.setPower(power - kP * encoderDiff);
+                novaBot.rightSliderMotor.setPower(power + kP * encoderDiff);
             } else {
-                rightSliderMotor.setPower(power + kP * encoderDiff);
-                leftSliderMotor.setPower(power - kP * encoderDiff);
+                novaBot.rightSliderMotor.setPower(power + kP * encoderDiff);
+                novaBot.leftSliderMotor.setPower(power - kP * encoderDiff);
             }
         }
 
@@ -248,11 +229,11 @@ public class NovaAutoBackdropSideBlueCopy extends LinearOpMode {
     }
 
     public void resetEncoders() {
-        frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        novaBot.frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        novaBot.frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        backRightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        backLeftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        novaBot.backRightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        novaBot.backLeftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
 }

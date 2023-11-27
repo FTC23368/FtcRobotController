@@ -19,7 +19,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
         import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
         import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
-@Autonomous(name="Mecanum: Auto Drive By Gyro", group="Robot")
+@Autonomous(name="NovaAutoDriveByGyro", group="Robot")
 public class NovaAutoDriveByGyro extends LinearOpMode {
 
     /* Declare OpMode members. */
