@@ -29,30 +29,44 @@ public class NovaAutoBackdropSideBlueCopy extends LinearOpMode {
             novaBot.backLeftMotor.setPower(0.3);
             novaBot.frontRightMotor.setPower(0.3);
             novaBot.backRightMotor.setPower(0.3);
+            telemetry.addData("Status: ", "stopping");
+            telemetry.update();
             sleep(1075);
             novaBot.frontLeftMotor.setPower(0);
             novaBot.backLeftMotor.setPower(0);
             novaBot.frontRightMotor.setPower(0);
             novaBot.backRightMotor.setPower(0);
+            telemetry.addData("Status: ", "entering if statement");
+            telemetry.update();
+            sleep(2000);
             // use tfod model to find prop on tape
+
+            sleep(2000);
             if (isPropPresent()) {
-                telemetry.addData(";alskdjf ", "entered if statement");
+                sleep(2000);
+                telemetry.addData("Status: ", "prop detected; ENTERED if statement");
                 telemetry.update();
                 novaBot.frontLeftMotor.setPower(0.3);
                 novaBot.backLeftMotor.setPower(0.3);
                 novaBot.frontRightMotor.setPower(0.3);
                 novaBot.backRightMotor.setPower(0.3);
-                sleep(300);
-                novaBot.frontLeftMotor.setPower(0);
-                novaBot.backLeftMotor.setPower(0);
-                novaBot.frontRightMotor.setPower(0);
-                novaBot.backRightMotor.setPower(0);
-            } else {
+                sleep(1500);
+                novaBot.frontLeftMotor.setPower(-0.3);
+                novaBot.backLeftMotor.setPower(-0.3);
+                novaBot.frontRightMotor.setPower(-0.3);
+                novaBot.backRightMotor.setPower(-0.3);
+                sleep(500);
+            }
+            /*else {
                 novaBot.frontLeftMotor.setPower(-0.3);
                 novaBot.backLeftMotor.setPower(-0.3);
                 novaBot.frontRightMotor.setPower(0.3);
                 novaBot.backRightMotor.setPower(0.3);
-            }
+            }*/
+            telemetry.addData("Status: ", "exited if statement");
+            telemetry.update();
+
+
 
             // go forward x inches, place pixel and then back
 
@@ -109,17 +123,19 @@ public class NovaAutoBackdropSideBlueCopy extends LinearOpMode {
             backRightMotor.setPower(0);
             // stop*/
 
-            novaBot.visionPortal.close();
+            //novaBot.visionPortal.close();
         }
 
 
     /**
      * Add telemetry about TensorFlow Object Detection (TFOD) recognitions.
      */
-    private boolean isPropPresent () {
 
+    private boolean isPropPresent () {
         List<Recognition> currentRecognitions = novaBot.tfod.getRecognitions();
         int size = currentRecognitions.size();
+        telemetry.addData("# objects detected: ", size);
+        telemetry.update();
 
         if (size > 0) {
             return true;
@@ -128,9 +144,8 @@ public class NovaAutoBackdropSideBlueCopy extends LinearOpMode {
         }
     }
 
-
     /** PID METHODS */
-
+/*
     public void pidMoveSliderToEncoderPosBrakeMode (int targetEncoderPos, double power, int slowDownEncoderPos) {
         novaBot.isSliderMoving = true;
 
@@ -242,5 +257,7 @@ public class NovaAutoBackdropSideBlueCopy extends LinearOpMode {
         novaBot.backRightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         novaBot.backLeftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
+
+    */
 
 }
