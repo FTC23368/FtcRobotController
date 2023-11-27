@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+/*package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -21,8 +21,9 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 @Autonomous(name="NovaAutoDriveByGyro", group="Robot")
 public class NovaAutoDriveByGyro extends LinearOpMode {
-
+*/
     /* Declare OpMode members. */
+/*
     private DcMotor leftFrontDrive = null;
     private DcMotor rightFrontDrive = null;
     private DcMotor leftRearDrive = null;
@@ -218,5 +219,4 @@ public class NovaAutoDriveByGyro extends LinearOpMode {
         heading = Range.clip(heading, 0, 360);
         return heading;
     }
-}
-
+}*/

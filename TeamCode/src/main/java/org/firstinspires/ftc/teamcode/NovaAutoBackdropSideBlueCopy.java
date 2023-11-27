@@ -36,6 +36,8 @@ public class NovaAutoBackdropSideBlueCopy extends LinearOpMode {
             novaBot.backRightMotor.setPower(0);
             // use tfod model to find prop on tape
             if (isPropPresent()) {
+                telemetry.addData(";alskdjf ", "entered if statement");
+                telemetry.update();
                 novaBot.frontLeftMotor.setPower(0.3);
                 novaBot.backLeftMotor.setPower(0.3);
                 novaBot.frontRightMotor.setPower(0.3);
@@ -45,6 +47,11 @@ public class NovaAutoBackdropSideBlueCopy extends LinearOpMode {
                 novaBot.backLeftMotor.setPower(0);
                 novaBot.frontRightMotor.setPower(0);
                 novaBot.backRightMotor.setPower(0);
+            } else {
+                novaBot.frontLeftMotor.setPower(-0.3);
+                novaBot.backLeftMotor.setPower(-0.3);
+                novaBot.frontRightMotor.setPower(0.3);
+                novaBot.backRightMotor.setPower(0.3);
             }
 
             // go forward x inches, place pixel and then back
