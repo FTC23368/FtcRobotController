@@ -56,13 +56,41 @@ public class NovaAutoBackdropSideBlueCopy extends LinearOpMode {
                 novaBot.frontRightMotor.setPower(-0.3);
                 novaBot.backRightMotor.setPower(-0.3);
                 sleep(500);
+            } else {
+                novaBot.frontLeftMotor.setPower(0.3);
+                novaBot.backLeftMotor.setPower(0.3);
+                novaBot.frontRightMotor.setPower(-0.3);
+                novaBot.backRightMotor.setPower(-0.3);
+                sleep(750);
+                novaBot.frontLeftMotor.setPower(0);
+                novaBot.backLeftMotor.setPower(0);
+                novaBot.frontRightMotor.setPower(0);
+                novaBot.backRightMotor.setPower(0);
+                sleep(2000);
+                telemetry.addData("Status: ", "entering if statement");
+                telemetry.update();
+                if (isPropPresent()) {
+                    sleep(2000);
+                    telemetry.addData("Status: ", "prop detected; ENTERED if statement");
+                    telemetry.update();
+                    novaBot.frontLeftMotor.setPower(0.3);
+                    novaBot.backLeftMotor.setPower(0.3);
+                    novaBot.frontRightMotor.setPower(0.3);
+                    novaBot.backRightMotor.setPower(0.3);
+                    sleep(1350);
+                    novaBot.frontLeftMotor.setPower(0.3);
+                    novaBot.backLeftMotor.setPower(0.3);
+                    novaBot.frontRightMotor.setPower(-0.3);
+                    novaBot.backRightMotor.setPower(-0.3);
+                    sleep(500);
+
+                    novaBot.frontLeftMotor.setPower(-0.3);
+                    novaBot.backLeftMotor.setPower(-0.3);
+                    novaBot.frontRightMotor.setPower(-0.3);
+                    novaBot.backRightMotor.setPower(-0.3);
+                    sleep(700);
+                }
             }
-            /*else {
-                novaBot.frontLeftMotor.setPower(-0.3);
-                novaBot.backLeftMotor.setPower(-0.3);
-                novaBot.frontRightMotor.setPower(0.3);
-                novaBot.backRightMotor.setPower(0.3);
-            }*/
             telemetry.addData("Status: ", "exited if statement");
             telemetry.update();
 
