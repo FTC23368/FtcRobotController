@@ -38,25 +38,39 @@ public class NovaAutoBackdropSideBlueCopy extends LinearOpMode {
             novaBot.backRightMotor.setPower(0);
             telemetry.addData("Status: ", "entering if statement");
             telemetry.update();
-            sleep(2000);
-            // use tfod model to find prop on tape
+            sleep(1000);
 
+            // turn right
+            novaBot.frontLeftMotor.setPower(-0.3);
+            novaBot.backLeftMotor.setPower(-0.3);
+            novaBot.frontRightMotor.setPower(0.3);
+            novaBot.backRightMotor.setPower(0.3);
+            sleep(750);
+            novaBot.frontLeftMotor.setPower(0);
+            novaBot.backLeftMotor.setPower(0);
+            novaBot.frontRightMotor.setPower(0);
+            novaBot.backRightMotor.setPower(0);
             sleep(2000);
+            // check for prop on right spike
             if (isPropPresent()) {
-                sleep(2000);
-                telemetry.addData("Status: ", "prop detected; ENTERED if statement");
-                telemetry.update();
                 novaBot.frontLeftMotor.setPower(0.3);
                 novaBot.backLeftMotor.setPower(0.3);
                 novaBot.frontRightMotor.setPower(0.3);
                 novaBot.backRightMotor.setPower(0.3);
-                sleep(1500);
+
+                sleep(675);
+                novaBot.frontLeftMotor.setPower(0);
+                novaBot.backLeftMotor.setPower(0);
+                novaBot.frontRightMotor.setPower(0);
+                novaBot.backRightMotor.setPower(0);
+                sleep(100);
                 novaBot.frontLeftMotor.setPower(-0.3);
                 novaBot.backLeftMotor.setPower(-0.3);
                 novaBot.frontRightMotor.setPower(-0.3);
                 novaBot.backRightMotor.setPower(-0.3);
-                sleep(500);
+                sleep(450);
             } else {
+                // turn to center
                 novaBot.frontLeftMotor.setPower(0.3);
                 novaBot.backLeftMotor.setPower(0.3);
                 novaBot.frontRightMotor.setPower(-0.3);
@@ -66,33 +80,159 @@ public class NovaAutoBackdropSideBlueCopy extends LinearOpMode {
                 novaBot.backLeftMotor.setPower(0);
                 novaBot.frontRightMotor.setPower(0);
                 novaBot.backRightMotor.setPower(0);
+                sleep(750);
+
                 sleep(2000);
-                telemetry.addData("Status: ", "entering if statement");
-                telemetry.update();
+                // check for prop on center
                 if (isPropPresent()) {
-                    sleep(2000);
-                    telemetry.addData("Status: ", "prop detected; ENTERED if statement");
-                    telemetry.update();
+                    // place prop on center
                     novaBot.frontLeftMotor.setPower(0.3);
                     novaBot.backLeftMotor.setPower(0.3);
                     novaBot.frontRightMotor.setPower(0.3);
                     novaBot.backRightMotor.setPower(0.3);
-                    sleep(1350);
-                    novaBot.frontLeftMotor.setPower(0.3);
-                    novaBot.backLeftMotor.setPower(0.3);
-                    novaBot.frontRightMotor.setPower(-0.3);
-                    novaBot.backRightMotor.setPower(-0.3);
-                    sleep(500);
-
+                    sleep(1200);
                     novaBot.frontLeftMotor.setPower(-0.3);
                     novaBot.backLeftMotor.setPower(-0.3);
                     novaBot.frontRightMotor.setPower(-0.3);
                     novaBot.backRightMotor.setPower(-0.3);
-                    sleep(700);
+                    sleep(500);
+                } else {
+                    novaBot.frontLeftMotor.setPower(0.3);
+                    novaBot.backLeftMotor.setPower(0.3);
+                    novaBot.frontRightMotor.setPower(0.3);
+                    novaBot.backRightMotor.setPower(0.3);
+                    sleep(300);
+                    // turn to left spike
+                    novaBot.frontLeftMotor.setPower(0.3);
+                    novaBot.backLeftMotor.setPower(0.3);
+                    novaBot.frontRightMotor.setPower(-0.3);
+                    novaBot.backRightMotor.setPower(-0.3);
+                    sleep(750);
+                    novaBot.frontLeftMotor.setPower(0);
+                    novaBot.backLeftMotor.setPower(0);
+                    novaBot.frontRightMotor.setPower(0);
+                    novaBot.backRightMotor.setPower(0);
+                    sleep(50);
+
+                    sleep(2000);
+                    if (isPropPresent()) {
+                        // place prop on left
+                        novaBot.frontLeftMotor.setPower(0.3);
+                        novaBot.backLeftMotor.setPower(0.3);
+                        novaBot.frontRightMotor.setPower(0.3);
+                        novaBot.backRightMotor.setPower(0.3);
+                        sleep(1400);
+                        novaBot.frontLeftMotor.setPower(-0.3);
+                        novaBot.backLeftMotor.setPower(-0.3);
+                        novaBot.frontRightMotor.setPower(-0.3);
+                        novaBot.backRightMotor.setPower(-0.3);
+                        sleep(1000);
+                        novaBot.frontLeftMotor.setPower(0);
+                        novaBot.backLeftMotor.setPower(0);
+                        novaBot.frontRightMotor.setPower(0);
+                        novaBot.backRightMotor.setPower(0);
+                        sleep(50);
+                    }
                 }
             }
+
+
+
+
+
+/*
+        sleep(1000);
+            if (isPropPresent()) {
+                sleep(2000);
+                telemetry.addData("Status: ", "prop detected; ENTERED if statement");
+                telemetry.update();
+                novaBot.frontLeftMotor.setPower(0.3);
+                novaBot.backLeftMotor.setPower(0.3);
+                novaBot.frontRightMotor.setPower(0.3);
+                novaBot.backRightMotor.setPower(0.3);
+                sleep(1200);
+                novaBot.frontLeftMotor.setPower(-0.3);
+                novaBot.backLeftMotor.setPower(-0.3);
+                novaBot.frontRightMotor.setPower(-0.3);
+                novaBot.backRightMotor.setPower(-0.3);
+                sleep(500);
+            } else {
+                    // turn right
+                    novaBot.frontLeftMotor.setPower(-0.3);
+                    novaBot.backLeftMotor.setPower(-0.3);
+                    novaBot.frontRightMotor.setPower(0.3);
+                    novaBot.backRightMotor.setPower(0.3);
+                    sleep(750);
+                    novaBot.frontLeftMotor.setPower(0);
+                    novaBot.backLeftMotor.setPower(0);
+                    novaBot.frontRightMotor.setPower(0);
+                    novaBot.backRightMotor.setPower(0);
+                    sleep(2000);
+                    // check for prop on right spike
+                    if (isPropPresent()) {
+                        novaBot.frontLeftMotor.setPower(0.3);
+                        novaBot.backLeftMotor.setPower(0.3);
+                        novaBot.frontRightMotor.setPower(0.3);
+                        novaBot.backRightMotor.setPower(0.3);
+
+                        sleep(675);
+                        novaBot.frontLeftMotor.setPower(0);
+                        novaBot.backLeftMotor.setPower(0);
+                        novaBot.frontRightMotor.setPower(0);
+                        novaBot.backRightMotor.setPower(0);
+                        sleep(100);
+                        novaBot.frontLeftMotor.setPower(-0.3);
+                        novaBot.backLeftMotor.setPower(-0.3);
+                        novaBot.frontRightMotor.setPower(-0.3);
+                        novaBot.backRightMotor.setPower(-0.3);
+                        sleep(450);
+                    } else {
+                        novaBot.frontLeftMotor.setPower(-0.3);
+                        novaBot.backLeftMotor.setPower(-0.3);
+                        novaBot.frontRightMotor.setPower(-0.3);
+                        novaBot.backRightMotor.setPower(-0.3);
+                        sleep(300);
+                        novaBot.frontLeftMotor.setPower(0.3);
+                        novaBot.backLeftMotor.setPower(0.3);
+                        novaBot.frontRightMotor.setPower(-0.3);
+                        novaBot.backRightMotor.setPower(-0.3);
+                        sleep(2000);
+
+                        if (isPropPresent()) {
+                            novaBot.frontLeftMotor.setPower(0.3);
+                            novaBot.backLeftMotor.setPower(0.3);
+                            novaBot.frontRightMotor.setPower(-0.3);
+                            novaBot.backRightMotor.setPower(-0.3);
+                            sleep(300);
+                            novaBot.frontLeftMotor.setPower(0.3);
+                            novaBot.backLeftMotor.setPower(0.3);
+                            novaBot.frontRightMotor.setPower(0.3);
+                            novaBot.backRightMotor.setPower(0.3);
+                            sleep(1250);
+                            novaBot.frontLeftMotor.setPower(0);
+                            novaBot.backLeftMotor.setPower(0);
+                            novaBot.frontRightMotor.setPower(0);
+                            novaBot.backRightMotor.setPower(0);
+                            sleep(50);
+                            novaBot.frontLeftMotor.setPower(-0.3);
+                            novaBot.backLeftMotor.setPower(-0.3);
+                            novaBot.frontRightMotor.setPower(-0.3);
+                            novaBot.backRightMotor.setPower(-0.3);
+                            sleep(750);
+                            novaBot.frontLeftMotor.setPower(0);
+                            novaBot.backLeftMotor.setPower(0);
+                            novaBot.frontRightMotor.setPower(0);
+                            novaBot.backRightMotor.setPower(0);
+                            sleep(50);
+                        }
+
+                    }
+                    // forward and place
+
+                    // back up
+                }
             telemetry.addData("Status: ", "exited if statement");
-            telemetry.update();
+            telemetry.update();*/
 
 
 
@@ -152,6 +292,7 @@ public class NovaAutoBackdropSideBlueCopy extends LinearOpMode {
             // stop*/
 
             //novaBot.visionPortal.close();
+
         }
 
 
@@ -287,5 +428,40 @@ public class NovaAutoBackdropSideBlueCopy extends LinearOpMode {
     }
 
     */
+    /*// turn left to check for left spike
+                novaBot.frontLeftMotor.setPower(0.3);
+                novaBot.backLeftMotor.setPower(0.3);
+                novaBot.frontRightMotor.setPower(-0.3);
+                novaBot.backRightMotor.setPower(-0.3);
+                sleep(750);
+                novaBot.frontLeftMotor.setPower(0);
+                novaBot.backLeftMotor.setPower(0);
+                novaBot.frontRightMotor.setPower(0);
+                novaBot.backRightMotor.setPower(0);
+                sleep(2000);
+                telemetry.addData("Status: ", "entering if statement");
+                telemetry.update();
+                // check for prop on left spike
+                if (isPropPresent()) {
+                    sleep(2000);
+                    telemetry.addData("Status: ", "prop detected; ENTERED if statement");
+                    telemetry.update();
+                    // place pixel on left
+                    novaBot.frontLeftMotor.setPower(0.3);
+                    novaBot.backLeftMotor.setPower(0.3);
+                    novaBot.frontRightMotor.setPower(0.3);
+                    novaBot.backRightMotor.setPower(0.3);
+                    sleep(1350);
+                    novaBot.frontLeftMotor.setPower(0.3);
+                    novaBot.backLeftMotor.setPower(0.3);
+                    novaBot.frontRightMotor.setPower(-0.3);
+                    novaBot.backRightMotor.setPower(-0.3);
+                    sleep(500);
+                    // back up
+                    novaBot.frontLeftMotor.setPower(-0.3);
+                    novaBot.backLeftMotor.setPower(-0.3);
+                    novaBot.frontRightMotor.setPower(-0.3);
+                    novaBot.backRightMotor.setPower(-0.3);
+                    sleep(700);*/
 
 }
