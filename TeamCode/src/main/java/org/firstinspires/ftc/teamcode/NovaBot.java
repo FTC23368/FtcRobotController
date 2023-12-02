@@ -16,6 +16,7 @@ public class NovaBot {
     public DcMotor leftSliderMotor;
     public DcMotor rightSliderMotor;
     public DcMotor frontLeftMotor, backLeftMotor, frontRightMotor, backRightMotor;
+    DcMotor intakeMotor;
     public ElapsedTime runtime = new ElapsedTime();
 
     public boolean isSliderMoving = false;
@@ -80,7 +81,6 @@ public class NovaBot {
         backRightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         backLeftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        DcMotor intakeMotor;
         intakeMotor = hardwareMap.dcMotor.get("intakeMotor");
 
         Servo pocket = hardwareMap.servo.get("pocket");
