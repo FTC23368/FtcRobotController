@@ -14,6 +14,7 @@ public class NovaTeleOpIntakeSideFront extends LinearOpMode {
 
     public DcMotor leftSliderMotor;
     public DcMotor rightSliderMotor;
+    public Servo drone;
 
     public TouchSensor limitSwitch;
     public boolean isSliderMoving = false;
@@ -35,9 +36,13 @@ public class NovaTeleOpIntakeSideFront extends LinearOpMode {
 
         limitSwitch = hardwareMap.touchSensor.get("limitSwitch");
 
+        drone = hardwareMap.servo.get("drone");
+
         boolean previousButtonState = false;
         boolean motorToggle = false;
 
+        boolean outtakePreviousButtonState = false;
+        boolean outtakeMotorToggle = false;
 
         leftSliderMotor = hardwareMap.dcMotor.get("leftSliderMotor");
         rightSliderMotor = hardwareMap.dcMotor.get("rightSliderMotor");
@@ -119,6 +124,17 @@ public class NovaTeleOpIntakeSideFront extends LinearOpMode {
 
                 previousButtonState = currentButtonState;
 
+            // OUTTAKE MOVEMENT -------------------------------------------------------------------|
+                boolean outtakeButtonState = gamepad2.a;
+
+                if (outtakeButtonState && !outtakePreviousButtonState) {
+                    outtakeMotorToggle = !outtakeMotorToggle;
+
+                    intakeMotor.setPower(outtakeMotorToggle ? -1 : 0);
+                }
+
+                outtakePreviousButtonState = outtakeButtonState;
+
             // LINEAR SLIDES MOVEMENT -------------------------------------------------------------|
             // If dpad left is pressed, sliders up to medium height
                 if (gamepad2.dpad_left) {
@@ -145,6 +161,14 @@ public class NovaTeleOpIntakeSideFront extends LinearOpMode {
                     sleep(700);
                     // 0 degrees - POCKET CLOSED
                     pocket.setPosition(0.25);
+                }
+
+            // DRONE MOVEMENT ---------------------------------------------------------------------|
+                if (gamepad2.b) {
+                    // Drone launched
+                    drone.setPosition(0.08);
+                    sleep(3000);
+                    drone.setPosition(0.02);
                 }
         }
     }

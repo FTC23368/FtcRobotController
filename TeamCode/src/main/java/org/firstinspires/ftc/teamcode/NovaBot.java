@@ -16,7 +16,9 @@ public class NovaBot {
     public DcMotor leftSliderMotor;
     public DcMotor rightSliderMotor;
     public DcMotor frontLeftMotor, backLeftMotor, frontRightMotor, backRightMotor;
-    DcMotor intakeMotor;
+    public DcMotor intakeMotor;
+
+    public Servo drone;
     public ElapsedTime runtime = new ElapsedTime();
 
     public boolean isSliderMoving = false;
@@ -70,6 +72,8 @@ public class NovaBot {
         backLeftMotor = hardwareMap.dcMotor.get("backLeftMotor");
         frontRightMotor = hardwareMap.dcMotor.get("frontRightMotor");
         backRightMotor = hardwareMap.dcMotor.get("backRightMotor");
+
+        Servo drone = hardwareMap.servo.get("drone");
 
         frontLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
