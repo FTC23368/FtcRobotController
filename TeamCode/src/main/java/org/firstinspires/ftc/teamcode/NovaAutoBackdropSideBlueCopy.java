@@ -93,7 +93,7 @@ public class NovaAutoBackdropSideBlueCopy extends LinearOpMode {
                     novaBot.backLeftMotor.setPower(0.3);
                     novaBot.frontRightMotor.setPower(0.3);
                     novaBot.backRightMotor.setPower(0.3);
-                    sleep(1150);
+                    sleep(1000);
                     novaBot.frontLeftMotor.setPower(-0.3);
                     novaBot.backLeftMotor.setPower(-0.3);
                     novaBot.frontRightMotor.setPower(-0.3);

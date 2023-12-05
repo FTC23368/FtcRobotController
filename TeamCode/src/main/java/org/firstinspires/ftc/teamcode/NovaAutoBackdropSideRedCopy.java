@@ -109,7 +109,7 @@ public class NovaAutoBackdropSideRedCopy extends LinearOpMode {
                 novaBot.backLeftMotor.setPower(0.3);
                 novaBot.frontRightMotor.setPower(0.3);
                 novaBot.backRightMotor.setPower(0.3);
-                sleep(1050);
+                sleep(900);
                 novaBot.frontLeftMotor.setPower(-0.3);
                 novaBot.backLeftMotor.setPower(-0.3);
                 novaBot.frontRightMotor.setPower(-0.3);
@@ -149,7 +149,7 @@ public class NovaAutoBackdropSideRedCopy extends LinearOpMode {
                     sleep(10);
 
                     // park in backstage
-                    //parkFromLeftSpike();
+                    parkFromLeftSpike();
             }
         }
 
@@ -183,7 +183,12 @@ public class NovaAutoBackdropSideRedCopy extends LinearOpMode {
         novaBot.backLeftMotor.setPower(-0.4);
         novaBot.frontRightMotor.setPower(-0.4);
         novaBot.backRightMotor.setPower(-0.4);
-        sleep(900);
+        sleep(650);
+        novaBot.frontLeftMotor.setPower(0);
+        novaBot.backLeftMotor.setPower(0);
+        novaBot.frontRightMotor.setPower(0);
+        novaBot.backRightMotor.setPower(0);
+        sleep(10);
         novaBot.intakeMotor.setPower(-1);
         sleep(1000);
     }
@@ -198,7 +203,7 @@ public class NovaAutoBackdropSideRedCopy extends LinearOpMode {
         novaBot.backLeftMotor.setPower(-0.4);
         novaBot.frontRightMotor.setPower(-0.4);
         novaBot.backRightMotor.setPower(-0.4);
-        sleep(1500);
+        sleep(1650);
         novaBot.frontLeftMotor.setPower(0.3);
         novaBot.backLeftMotor.setPower(0.3);
         novaBot.frontRightMotor.setPower(-0.3);
@@ -208,7 +213,7 @@ public class NovaAutoBackdropSideRedCopy extends LinearOpMode {
         novaBot.backLeftMotor.setPower(-0.4);
         novaBot.frontRightMotor.setPower(-0.4);
         novaBot.backRightMotor.setPower(-0.4);
-        sleep(650);
+        sleep(500);
         novaBot.frontLeftMotor.setPower(0);
         novaBot.backLeftMotor.setPower(0);
         novaBot.frontRightMotor.setPower(0);
@@ -223,17 +228,17 @@ public class NovaAutoBackdropSideRedCopy extends LinearOpMode {
         novaBot.backLeftMotor.setPower(-0.3);
         novaBot.frontRightMotor.setPower(0.3);
         novaBot.backRightMotor.setPower(0.3);
-        sleep(1500);
+        sleep(1100);
         novaBot.frontLeftMotor.setPower(-0.4);
         novaBot.backLeftMotor.setPower(-0.4);
         novaBot.frontRightMotor.setPower(-0.4);
         novaBot.backRightMotor.setPower(-0.4);
-        sleep(1100);
-        novaBot.frontLeftMotor.setPower(-0.3);
-        novaBot.backLeftMotor.setPower(-0.3);
-        novaBot.frontRightMotor.setPower(0.3);
-        novaBot.backRightMotor.setPower(0.3);
-        sleep(1000);
+        sleep(1050);
+        novaBot.frontLeftMotor.setPower(0.3);
+        novaBot.backLeftMotor.setPower(0.3);
+        novaBot.frontRightMotor.setPower(-0.3);
+        novaBot.backRightMotor.setPower(-0.3);
+        sleep(1250);
         novaBot.frontLeftMotor.setPower(-0.4);
         novaBot.backLeftMotor.setPower(-0.4);
         novaBot.frontRightMotor.setPower(-0.4);
