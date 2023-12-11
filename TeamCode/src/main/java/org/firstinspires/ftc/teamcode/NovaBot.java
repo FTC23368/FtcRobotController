@@ -1,22 +1,32 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 public class NovaBot {
     public DcMotor leftSliderMotor;
     public DcMotor rightSliderMotor;
     public DcMotor frontLeftMotor, backLeftMotor, frontRightMotor, backRightMotor;
     public DcMotor intakeMotor;
+
+    public IMU imu;
+    YawPitchRollAngles robotOrientation;
 
     public Servo drone;
     public ElapsedTime runtime = new ElapsedTime();
@@ -53,11 +63,10 @@ public class NovaBot {
     public LinearOpMode linearOpMode;
     public HardwareMap hardwareMap;
 
-    public NovaBot (LinearOpMode callingLinearOpMode) {
+    public NovaBot(LinearOpMode callingLinearOpMode) {
         this.linearOpMode = callingLinearOpMode;
         this.hardwareMap = callingLinearOpMode.hardwareMap;
     }
-
 
 
     public void initNovaBot() {
@@ -74,6 +83,15 @@ public class NovaBot {
         backRightMotor = hardwareMap.dcMotor.get("backRightMotor");
 
         Servo drone = hardwareMap.servo.get("drone");
+
+        imu = hardwareMap.get(IMU.class, "imu");
+        // Adjust the orientation parameters to match your robot
+        IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
+                RevHubOrientationOnRobot.LogoFacingDirection.UP,
+                RevHubOrientationOnRobot.UsbFacingDirection.LEFT));
+        // Without this, the REV Hub's orientation is assumed to be logo up / USB forward
+        imu.initialize(parameters);
+        robotOrientation = imu.getRobotYawPitchRollAngles();
 
         frontLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -158,5 +176,78 @@ public class NovaBot {
         //visionPortal.setProcessorEnabled(tfod, true);
 
     }   // end method initTfod()
+
+    public void gyroTurnRight(double turnAngle) {
+        double currentHeadingAngle, driveMotorsPower, error;
+
+        currentHeadingAngle = getGyroAngle();
+
+        this.linearOpMode.telemetry.addData("currentHeadingAngle: ", currentHeadingAngle);
+        this.linearOpMode.telemetry.update();
+        this.linearOpMode.sleep(10000);
+
+        while (this.linearOpMode.opModeIsActive() && (currentHeadingAngle <= turnAngle)) {
+            this.linearOpMode.telemetry.addData("currentHeadingAngle: ", currentHeadingAngle);
+            this.linearOpMode.telemetry.update();
+
+
+            error = turnAngle - currentHeadingAngle;
+
+            if (error > -10) {
+                driveMotorsPower = 0.3;
+            } else {
+                driveMotorsPower = error / 150;
+            }
+
+            // Negative power causes right turn
+            frontLeftMotor.setPower(-driveMotorsPower);
+            backLeftMotor.setPower(-driveMotorsPower);
+            frontRightMotor.setPower(driveMotorsPower);
+            backRightMotor.setPower(driveMotorsPower);
+
+            currentHeadingAngle = getGyroAngle();
+        }
+
+        this.linearOpMode.telemetry.addData("Status: ", " exited while loop");
+        this.linearOpMode.telemetry.update();
+
+        frontLeftMotor.setPower(0);
+        backLeftMotor.setPower(0);
+        frontRightMotor.setPower(0);
+        backRightMotor.setPower(0);
+    }
+
+    public void gyroTurnLeft(double turnAngle) {
+        double currentHeadingAngle, driveMotorsPower, error;
+
+        currentHeadingAngle = getGyroAngle();
+
+        while (this.linearOpMode.opModeIsActive() && (currentHeadingAngle >= turnAngle)) {
+            error = turnAngle - currentHeadingAngle;
+
+            if (error < 10) {
+                driveMotorsPower = 0.3;
+            } else {
+                driveMotorsPower = error / 150;
+            }
+
+            // Negative power causes right turn
+            frontLeftMotor.setPower(driveMotorsPower);
+            backLeftMotor.setPower(driveMotorsPower);
+            frontRightMotor.setPower(-driveMotorsPower);
+            backRightMotor.setPower(-driveMotorsPower);
+
+            currentHeadingAngle = getGyroAngle();
+        }
+
+        frontLeftMotor.setPower(0);
+        backLeftMotor.setPower(0);
+        frontRightMotor.setPower(0);
+        backRightMotor.setPower(0);
+    }
+
+    public double getGyroAngle() {
+        return robotOrientation.getYaw(AngleUnit.DEGREES);
+    }
 
 }
