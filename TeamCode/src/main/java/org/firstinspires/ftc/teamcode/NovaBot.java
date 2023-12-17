@@ -177,6 +177,79 @@ public class NovaBot {
 
     }   // end method initTfod()
 
+    public void gyroTurnRight(double targetAngle) {
+        imu.resetYaw();
+        double currentHeading = getGyroAngle();
+
+        while (this.linearOpMode.opModeIsActive() && !isTargetAngleReached(currentHeading, targetAngle)) {
+            currentHeading = getGyroAngle();
+
+            this.linearOpMode.telemetry.addData("currentHeading: ", getAngle());
+            this.linearOpMode.telemetry.update();
+
+            frontLeftMotor.setPower(-0.3);
+            backLeftMotor.setPower(-0.3);
+            frontRightMotor.setPower(0.3);
+            backRightMotor.setPower(0.3);
+        }
+
+        this.linearOpMode.telemetry.addData("Current Angle ", getAngle());
+        this.linearOpMode.telemetry.update();
+
+        this.linearOpMode.telemetry.addData("Status: ", " exited while loop");
+        this.linearOpMode.telemetry.update();
+
+        stopAllMotors();
+    }
+
+    public void gyroTurnLeft(double targetAngle) {
+        imu.resetYaw();
+        double currentHeading = getGyroAngle();
+
+        while (this.linearOpMode.opModeIsActive() && !isTargetAngleReached(currentHeading, targetAngle)) {
+            currentHeading = getGyroAngle();
+
+            this.linearOpMode.telemetry.addData("currentHeading: ", getAngle());
+            this.linearOpMode.telemetry.update();
+
+            frontLeftMotor.setPower(0.3);
+            backLeftMotor.setPower(0.3);
+            frontRightMotor.setPower(-0.3);
+            backRightMotor.setPower(-0.3);
+        }
+
+        this.linearOpMode.telemetry.addData("Current Angle ", getAngle());
+        this.linearOpMode.telemetry.update();
+
+        this.linearOpMode.telemetry.addData("Status: ", " exited while loop");
+        this.linearOpMode.telemetry.update();
+
+        stopAllMotors();
+    }
+
+    public double getAngle() {
+        robotOrientation = imu.getRobotYawPitchRollAngles();
+        double gyroAngle = robotOrientation.getYaw(AngleUnit.DEGREES);
+        linearOpMode.telemetry.addData("Gyro Angle", gyroAngle);
+        linearOpMode.telemetry.update();
+        return gyroAngle;
+    }
+
+
+    private boolean isTargetAngleReached(double currentAngle, double targetAngle) {
+        final double ANGLE_TOLERANCE = 0.5; // degrees, adjust as needed
+        return Math.abs(targetAngle - currentAngle) < ANGLE_TOLERANCE;
+    }
+
+    private void stopAllMotors() {
+        frontLeftMotor.setPower(0);
+        backLeftMotor.setPower(0);
+        frontRightMotor.setPower(0);
+        backRightMotor.setPower(0);
+    }
+
+
+    /*
     public void gyroTurnRight(double turnAngle) {
         double currentHeadingAngle, driveMotorsPower, error;
 
@@ -217,7 +290,9 @@ public class NovaBot {
         backRightMotor.setPower(0);
     }
 
-    public void gyroTurnLeft(double turnAngle) {
+     */
+
+    /*public void gyroTurnLeft(double turnAngle) {
         double currentHeadingAngle, driveMotorsPower, error;
 
         currentHeadingAngle = getGyroAngle();
@@ -244,7 +319,7 @@ public class NovaBot {
         backLeftMotor.setPower(0);
         frontRightMotor.setPower(0);
         backRightMotor.setPower(0);
-    }
+    }*/
 
     public double getGyroAngle() {
         return robotOrientation.getYaw(AngleUnit.DEGREES);
