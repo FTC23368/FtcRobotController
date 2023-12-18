@@ -8,7 +8,6 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 // BACKDROP SIDE
 
-
 @Autonomous
 public class NovaAutoBackdropSideBlue extends LinearOpMode {
 
