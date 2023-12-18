@@ -13,7 +13,7 @@ import java.util.List;
 public class NovaAutoEncoders2 extends LinearOpMode {
 
     NovaBot novaBot;
-    static final double MOTOR_TICK_COUNTS = 537.7;
+    static final double MOTOR_TICK_COUNTS = 537.6;
     static final double WHEEL_DIAMETER_MM = 96;
     static final double WHEEL_CIRCUMFERENCE_MM = 301.44;
 
@@ -30,8 +30,24 @@ public class NovaAutoEncoders2 extends LinearOpMode {
 
         novaBot.frontLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         novaBot.backLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        novaBot.frontRightMotor.setDirection(DcMotorSimple.Direction.FORWARD);
-        novaBot.backRightMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        novaBot.frontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        novaBot.backRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        /*
+        Motion with pocket-side front
+
+        All reverse:
+        forward to the left
+
+        All forward:
+        backward to the left
+
+        Left reverse, right forward:
+        forward to the left
+
+        Right reverse, left forward:
+        backward to the left
+         */
 
         // Reset encoders and set mode to RUN_USING_ENCODER
         resetEncoders();
@@ -40,7 +56,7 @@ public class NovaAutoEncoders2 extends LinearOpMode {
         waitForStart();
 
         // Move forward for 12 inches using encoders
-        encoderDrive(0.3, 12);
+        encoderDrive(0.2, 60);
 
         // Add more autonomous movements as needed
 
@@ -77,9 +93,9 @@ public class NovaAutoEncoders2 extends LinearOpMode {
         novaBot.backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         // Set motor power
-        novaBot.frontLeftMotor.setPower(speed);
+        //novaBot.frontLeftMotor.setPower(speed);
         novaBot.frontRightMotor.setPower(speed);
-        novaBot.backLeftMotor.setPower(speed);
+        //novaBot.backLeftMotor.setPower(speed);
         novaBot.backRightMotor.setPower(speed);
 
         // Wait until the motors reach the target position
