@@ -36,7 +36,8 @@ public class NovaAutoEncodersSuccess extends LinearOpMode {
         novaBot.backRightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         double fLTargetPos = novaBot.frontLeftMotor.getCurrentPosition() - 3000;
-
+        // -3009 = 69 in
+        // 1 inch = 43.6 ticks
         while (novaBot.linearOpMode.opModeIsActive() && novaBot.frontLeftMotor.getCurrentPosition() > fLTargetPos) {
             novaBot.frontLeftMotor.setPower(0.3);
             novaBot.backLeftMotor.setPower(0.3);

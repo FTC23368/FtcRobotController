@@ -32,10 +32,8 @@ public class NovaBot {
     public ElapsedTime runtime = new ElapsedTime();
 
     public boolean isSliderMoving = false;
-    public int propPosition = 0;
-    //1 = left, 2 = middle, 3 = right
 
-    double currentPos = 0;
+    public static final double ENCODER_TICKS_PER_INCH = (3009/69);
 
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
 
@@ -325,4 +323,74 @@ public class NovaBot {
         return robotOrientation.getYaw(AngleUnit.DEGREES);
     }
 
+    /**
+     * METHOD THAT MOVES FORWARD USING MOTOR ENCODERS
+     */
+    public void forwardUsingEncoders (double inches, double speed){
+        frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        frontLeftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        backLeftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        frontRightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        backRightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        double targetPos = -(inches * ENCODER_TICKS_PER_INCH);
+
+        // -3009 = 69 in
+        // 1 inch = 43.6 ticks
+        while (linearOpMode.opModeIsActive() && frontLeftMotor.getCurrentPosition() > targetPos) {
+            frontLeftMotor.setPower(speed);
+            backLeftMotor.setPower(speed);
+            frontRightMotor.setPower(speed);
+            backRightMotor.setPower(speed);
+        }
+
+        frontLeftMotor.setPower(0);
+        backLeftMotor.setPower(0);
+        frontRightMotor.setPower(0);
+        backRightMotor.setPower(0);
+
+        linearOpMode.telemetry.addData("Encoder pos front left", frontLeftMotor.getCurrentPosition());
+        linearOpMode.telemetry.addData("Encoder pos back left", backLeftMotor.getCurrentPosition());
+        linearOpMode.telemetry.addData("Encoder pos front right", frontRightMotor.getCurrentPosition());
+        linearOpMode.telemetry.addData("Encoder pos back right", backRightMotor.getCurrentPosition());
+
+        linearOpMode.telemetry.update();
+    }
+
+    public void backwardUsingEncoders (double inches, double speed){
+        frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        frontLeftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        backLeftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        frontRightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        backRightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        double targetPos = inches * ENCODER_TICKS_PER_INCH;
+
+        while (linearOpMode.opModeIsActive() && frontLeftMotor.getCurrentPosition() < targetPos) {
+            frontLeftMotor.setPower(-speed);
+            backLeftMotor.setPower(-speed);
+            frontRightMotor.setPower(-speed);
+            backRightMotor.setPower(-speed);
+        }
+
+        frontLeftMotor.setPower(0);
+        backLeftMotor.setPower(0);
+        frontRightMotor.setPower(0);
+        backRightMotor.setPower(0);
+
+        linearOpMode.telemetry.addData("Encoder pos front left", frontLeftMotor.getCurrentPosition());
+        linearOpMode.telemetry.addData("Encoder pos back left", backLeftMotor.getCurrentPosition());
+        linearOpMode.telemetry.addData("Encoder pos front right", frontRightMotor.getCurrentPosition());
+        linearOpMode.telemetry.addData("Encoder pos back right", backRightMotor.getCurrentPosition());
+
+        linearOpMode.telemetry.update();
+    }
 }
