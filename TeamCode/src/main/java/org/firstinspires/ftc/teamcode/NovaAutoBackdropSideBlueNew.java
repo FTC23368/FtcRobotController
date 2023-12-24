@@ -32,22 +32,18 @@ public class NovaAutoBackdropSideBlueNew extends LinearOpMode {
         sleep(1250);
         // check for prop on spike
         if (isPropPresent()) {
-            novaBot.gyroTurnLeft(15);
-            novaBot.forwardUsingEncoders(13, 0.3);
-            novaBot.backwardUsingEncoders(13, 0.3);
+            novaBot.gyroTurnLeft(7);
+            novaBot.forwardUsingEncoders(14, 0.3);
+            novaBot.backwardUsingEncoders(14, 0.3);
 
             // go to backdrop to place pixel
-            novaBot.gyroTurnLeft(117);
-            novaBot.forwardUsingEncoders(40.75, 0.3);
+            novaBot.gyroTurnLeft(126);
+            novaBot.forwardUsingEncoders(5, 0.25);
+
             // strafe
-            novaBot.frontLeftMotor.setPower(0.3);
-            novaBot.backLeftMotor.setPower(-0.3);
-            novaBot.frontRightMotor.setPower(-0.3);
-            novaBot.backRightMotor.setPower(0.3);
-            sleep(2680);
-            novaBot.gyroTurnLeft(5);
-            novaBot.backwardUsingEncoders(2, 0.2);
-            novaBot.forwardUsingEncoders(3, 0.3);
+            novaBot.strafeRightUsingEncoders(18, 0.4);
+            novaBot.forwardUsingEncoders(34.75, 0.25);
+
 
             parkFromRightSpike();
         } else {

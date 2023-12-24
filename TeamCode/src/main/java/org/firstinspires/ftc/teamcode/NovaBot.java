@@ -34,6 +34,7 @@ public class NovaBot {
     public boolean isSliderMoving = false;
 
     public static final double ENCODER_TICKS_PER_INCH = (3009/69);
+    public static final double STRAFING_ENCODER_TICKS_PER_INCH = (50.75);
 
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
 
@@ -247,78 +248,6 @@ public class NovaBot {
     }
 
 
-    /*
-    public void gyroTurnRight(double turnAngle) {
-        double currentHeadingAngle, driveMotorsPower, error;
-
-        currentHeadingAngle = getGyroAngle();
-
-        this.linearOpMode.telemetry.addData("currentHeadingAngle: ", currentHeadingAngle);
-        this.linearOpMode.telemetry.update();
-        this.linearOpMode.sleep(10000);
-
-        while (this.linearOpMode.opModeIsActive() && (currentHeadingAngle <= turnAngle)) {
-            this.linearOpMode.telemetry.addData("currentHeadingAngle: ", currentHeadingAngle);
-            this.linearOpMode.telemetry.update();
-
-
-            error = turnAngle - currentHeadingAngle;
-
-            if (error > -10) {
-                driveMotorsPower = 0.3;
-            } else {
-                driveMotorsPower = error / 150;
-            }
-
-            // Negative power causes right turn
-            frontLeftMotor.setPower(-driveMotorsPower);
-            backLeftMotor.setPower(-driveMotorsPower);
-            frontRightMotor.setPower(driveMotorsPower);
-            backRightMotor.setPower(driveMotorsPower);
-
-            currentHeadingAngle = getGyroAngle();
-        }
-
-        this.linearOpMode.telemetry.addData("Status: ", " exited while loop");
-        this.linearOpMode.telemetry.update();
-
-        frontLeftMotor.setPower(0);
-        backLeftMotor.setPower(0);
-        frontRightMotor.setPower(0);
-        backRightMotor.setPower(0);
-    }
-
-     */
-
-    /*public void gyroTurnLeft(double turnAngle) {
-        double currentHeadingAngle, driveMotorsPower, error;
-
-        currentHeadingAngle = getGyroAngle();
-
-        while (this.linearOpMode.opModeIsActive() && (currentHeadingAngle >= turnAngle)) {
-            error = turnAngle - currentHeadingAngle;
-
-            if (error < 10) {
-                driveMotorsPower = 0.3;
-            } else {
-                driveMotorsPower = error / 150;
-            }
-
-            // Negative power causes right turn
-            frontLeftMotor.setPower(driveMotorsPower);
-            backLeftMotor.setPower(driveMotorsPower);
-            frontRightMotor.setPower(-driveMotorsPower);
-            backRightMotor.setPower(-driveMotorsPower);
-
-            currentHeadingAngle = getGyroAngle();
-        }
-
-        frontLeftMotor.setPower(0);
-        backLeftMotor.setPower(0);
-        frontRightMotor.setPower(0);
-        backRightMotor.setPower(0);
-    }*/
-
     public double getGyroAngle() {
         return robotOrientation.getYaw(AngleUnit.DEGREES);
     }
@@ -393,4 +322,189 @@ public class NovaBot {
 
         linearOpMode.telemetry.update();
     }
+    public void strafeRightUsingEncoders (double inches, double speed){
+        // left wheels both moving outward in code
+        // right wheels both moving inward in code
+
+        frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        frontLeftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        backLeftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        frontRightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        backRightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        double targetPos = -(inches * STRAFING_ENCODER_TICKS_PER_INCH);
+
+        // -3009 = 69 in
+        // 1 inch = 43.6 ticks
+        while (linearOpMode.opModeIsActive() && frontLeftMotor.getCurrentPosition() > targetPos) {
+            frontLeftMotor.setPower(speed);
+            backLeftMotor.setPower(-speed);
+            frontRightMotor.setPower(-speed);
+            backRightMotor.setPower(speed);
+        }
+
+        frontLeftMotor.setPower(0);
+        backLeftMotor.setPower(0);
+        frontRightMotor.setPower(0);
+        backRightMotor.setPower(0);
+
+        linearOpMode.telemetry.addData("Encoder pos front left", frontLeftMotor.getCurrentPosition());
+        linearOpMode.telemetry.addData("Encoder pos back left", backLeftMotor.getCurrentPosition());
+        linearOpMode.telemetry.addData("Encoder pos front right", frontRightMotor.getCurrentPosition());
+        linearOpMode.telemetry.addData("Encoder pos back right", backRightMotor.getCurrentPosition());
+
+        linearOpMode.telemetry.update();
+    }
+
+    public void strafeLeftUsingEncoders (double inches, double speed){
+        // left wheels both moving inward in code
+        // right wheels both moving outward in code
+
+        frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        frontLeftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        backLeftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        frontRightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        backRightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        double targetPos = inches * STRAFING_ENCODER_TICKS_PER_INCH;
+
+        // -3009 = 69 in
+        // 1 inch = 43.6 ticks
+        while (linearOpMode.opModeIsActive() && frontLeftMotor.getCurrentPosition() < targetPos) {
+            frontLeftMotor.setPower(-speed);
+            backLeftMotor.setPower(speed);
+            frontRightMotor.setPower(speed);
+            backRightMotor.setPower(-speed);
+        }
+
+        frontLeftMotor.setPower(0);
+        backLeftMotor.setPower(0);
+        frontRightMotor.setPower(0);
+        backRightMotor.setPower(0);
+
+        linearOpMode.telemetry.addData("Encoder pos front left", frontLeftMotor.getCurrentPosition());
+        linearOpMode.telemetry.addData("Encoder pos back left", backLeftMotor.getCurrentPosition());
+        linearOpMode.telemetry.addData("Encoder pos front right", frontRightMotor.getCurrentPosition());
+        linearOpMode.telemetry.addData("Encoder pos back right", backRightMotor.getCurrentPosition());
+
+        linearOpMode.telemetry.update();
+    }
+
+    /**
+     * PID METHODS
+     */
+
+
+    public void pidMoveSliderToEncoderPosBrakeMode (int targetEncoderPos, double power, int slowDownEncoderPos) {
+        isSliderMoving = true;
+
+        getCurrentSliderEncoderPos();
+
+        linearOpMode.telemetry.addLine(targetEncoderPos + "," + leftSliderMotor.getCurrentPosition());
+        linearOpMode.telemetry.update();
+
+        if (targetEncoderPos > leftSliderMotor.getCurrentPosition()) {
+            pidSliderMoveUpBrakeMode(targetEncoderPos, power, slowDownEncoderPos);
+        } else if (targetEncoderPos < leftSliderMotor.getCurrentPosition()) {
+            pidSliderMoveDownBrakeMode(targetEncoderPos, power, slowDownEncoderPos);
+            linearOpMode.telemetry.addLine("Current Position: " + leftSliderMotor.getCurrentPosition());
+            linearOpMode.telemetry.update();
+        }
+
+        isSliderMoving = false;
+    }
+
+    private void pidSliderMoveUpBrakeMode (int targetEncoderPos, double power, int slowDownEncoderPos) {
+        this.leftSliderMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightSliderMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        double encoderDiff;
+        double kP = 0.01;
+
+        getCurrentSliderEncoderPos();
+
+        while ((getCurrentSliderEncoderPos() <= targetEncoderPos - slowDownEncoderPos) && linearOpMode.opModeIsActive()) {
+            encoderDiff = leftSliderMotor.getCurrentPosition() - rightSliderMotor.getCurrentPosition();
+
+            if (encoderDiff >= 0){
+                leftSliderMotor.setPower((power - kP * encoderDiff));
+                rightSliderMotor.setPower(power + kP * encoderDiff);
+            } else {
+                rightSliderMotor.setPower((power + kP * encoderDiff));
+                leftSliderMotor.setPower(power - kP * encoderDiff);
+            }
+        }
+
+
+        while (getCurrentSliderEncoderPos() <= targetEncoderPos && linearOpMode.opModeIsActive()) {
+            encoderDiff = leftSliderMotor.getCurrentPosition() - rightSliderMotor.getCurrentPosition();
+            power = 0.3;
+
+            if (encoderDiff >= 0) {
+                leftSliderMotor.setPower(power - kP *encoderDiff);
+                rightSliderMotor.setPower(power + kP * encoderDiff);
+            } else {
+                rightSliderMotor.setPower(power + kP *encoderDiff);
+                leftSliderMotor.setPower(power-kP * encoderDiff);
+            }
+        }
+
+
+        holdSlider();
+    }
+
+    public int getCurrentSliderEncoderPos() {
+        return (leftSliderMotor.getCurrentPosition() + rightSliderMotor.getCurrentPosition()) / 2;
+    }
+
+    public void holdSlider() {
+        rightSliderMotor.setPower(0.05);
+        leftSliderMotor.setPower(0.05);
+    }
+
+    private void pidSliderMoveDownBrakeMode (int targetEncoderPos, double power, int slowDownEncoderPos) {
+        leftSliderMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightSliderMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        double encoderDiff;
+        double kP = 0.01;
+        power = -power;
+
+        while (getCurrentSliderEncoderPos() >= targetEncoderPos + slowDownEncoderPos && linearOpMode.opModeIsActive()) {
+            encoderDiff = leftSliderMotor.getCurrentPosition() - rightSliderMotor.getCurrentPosition();
+
+            if (encoderDiff >= 0) {
+                leftSliderMotor.setPower(power - kP * encoderDiff);
+                rightSliderMotor.setPower(power + kP * encoderDiff);
+            } else {
+                rightSliderMotor.setPower(power + kP * encoderDiff);
+                leftSliderMotor.setPower(power - kP * encoderDiff);
+            }
+        }
+
+        while (getCurrentSliderEncoderPos() >= targetEncoderPos && linearOpMode.opModeIsActive()) {
+            encoderDiff = leftSliderMotor.getCurrentPosition() - rightSliderMotor.getCurrentPosition();
+
+            power = -0.1;
+
+            if (encoderDiff >= 0) {
+                leftSliderMotor.setPower(power - kP * encoderDiff);
+                rightSliderMotor.setPower(power + kP * encoderDiff);
+            } else {
+                rightSliderMotor.setPower(power + kP * encoderDiff);
+                leftSliderMotor.setPower(power - kP * encoderDiff);
+            }
+        }
+
+        holdSlider();
+    }
+
 }

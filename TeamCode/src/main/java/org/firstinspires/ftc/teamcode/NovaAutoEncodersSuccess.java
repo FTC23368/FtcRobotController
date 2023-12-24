@@ -38,11 +38,15 @@ public class NovaAutoEncodersSuccess extends LinearOpMode {
         double fLTargetPos = novaBot.frontLeftMotor.getCurrentPosition() - 3000;
         // -3009 = 69 in
         // 1 inch = 43.6 ticks
+
+        // strafing
+        // -3011 = 62 in
+        // 1 inch = 48.6 ticks
         while (novaBot.linearOpMode.opModeIsActive() && novaBot.frontLeftMotor.getCurrentPosition() > fLTargetPos) {
-            novaBot.frontLeftMotor.setPower(0.3);
-            novaBot.backLeftMotor.setPower(0.3);
-            novaBot.frontRightMotor.setPower(0.3);
-            novaBot.backRightMotor.setPower(0.3);
+            novaBot.frontLeftMotor.setPower(0.5);
+            novaBot.backLeftMotor.setPower(-0.5);
+            novaBot.frontRightMotor.setPower(-0.5);
+            novaBot.backRightMotor.setPower(0.5);
         }
 
         novaBot.frontLeftMotor.setPower(0);
@@ -56,6 +60,7 @@ public class NovaAutoEncodersSuccess extends LinearOpMode {
         novaBot.linearOpMode.telemetry.addData("Encoder pos back right", novaBot.backRightMotor.getCurrentPosition());
 
         novaBot.linearOpMode.telemetry.update();
+        sleep(3000);
 
         //stop();
 

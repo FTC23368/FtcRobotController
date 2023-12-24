@@ -25,8 +25,10 @@ public class NovaAutoTestEncoders extends LinearOpMode {
         waitForStart();
         novaBot.runtime.reset();
 
-        novaBot.forwardUsingEncoders(24, 0.3);
-        novaBot.gyroTurnRight(-90);
+        //novaBot.forwardUsingEncoders(24, 0.3);
+        //novaBot.gyroTurnRight(-90);
+        novaBot.strafeLeftUsingEncoders(18, 0.4);
+        //novaBot.strafeRightUsingEncoders(10, 0.4);
     }
 
 }
