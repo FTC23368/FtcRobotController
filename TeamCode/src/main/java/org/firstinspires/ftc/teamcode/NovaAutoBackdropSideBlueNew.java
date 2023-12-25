@@ -39,13 +39,17 @@ public class NovaAutoBackdropSideBlueNew extends LinearOpMode {
             // go to backdrop to place pixel
             novaBot.gyroTurnLeft(126);
             novaBot.forwardUsingEncoders(5, 0.25);
+            novaBot.linearOpMode.telemetry.addData("Status", "starting to strafe");
+            novaBot.linearOpMode.telemetry.update();
 
             // strafe
             novaBot.strafeRightUsingEncoders(18, 0.4);
             novaBot.forwardUsingEncoders(34.75, 0.25);
 
+            novaBot.placePixel();
 
             parkFromRightSpike();
+
         } else {
             novaBot.forwardUsingEncoders(2, 0.2);
             novaBot.gyroTurnLeft(47);
@@ -54,68 +58,41 @@ public class NovaAutoBackdropSideBlueNew extends LinearOpMode {
                 novaBot.forwardUsingEncoders(15.5, 0.3);
                 novaBot.backwardUsingEncoders(15.5, 0.3);
 
+                // strafe
+                novaBot.strafeLeftUsingEncoders(24, 0.4);
+                // rotate
+                novaBot.gyroTurnLeft(87);
+                // strafe right
+                novaBot.strafeRightUsingEncoders(13.7, 0.4);
+                // move forward to backdrop
+                novaBot.forwardUsingEncoders(19, 0.3);
+
+                novaBot.placePixel();
                 parkFromCenterSpike();
             } else {
                 novaBot.forwardUsingEncoders(3, 0.2);
                 novaBot.gyroTurnLeft(30);
-                novaBot.backwardUsingEncoders(2, 0.2);
-                sleep(1250);
-                if (isPropPresent()) {
-                    novaBot.gyroTurnLeft(10);
-                    novaBot.forwardUsingEncoders(15, 0.3);
-                    novaBot.backwardUsingEncoders(11, 0.3);
+                novaBot.backwardUsingEncoders(1, 0.2);
 
-                    parkFromLeftSpike();
-                }
+                novaBot.gyroTurnLeft(10);
+                novaBot.forwardUsingEncoders(14, 0.3);
+                novaBot.backwardUsingEncoders(8.5, 0.3);
+
+                // rotate
+                novaBot.gyroTurnLeft(32);
+                // strafe left
+                novaBot.strafeLeftUsingEncoders(5, 0.4);
+                // forward
+                novaBot.forwardUsingEncoders(24, 0.3);
+                // strafe right a little
+                novaBot.strafeRightUsingEncoders(2, 0.4);
+                // forward to align to backdrop
+                novaBot.forwardUsingEncoders(15, 0.3);
+
+                novaBot.placePixel();
+                parkFromLeftSpike();
             }
         }
-
-/*
-        // turn right
-
-        // check for prop on right spike
-        if (isPropPresent()) {
-            // place prop on spike
-            // move forward
-            // move back
-
-            // park in backstage
-            parkFromRightSpike();
-        } else {
-            // turn to center (turn left)
-
-            // check for prop on center
-            if (isPropPresent()) {
-                // place prop on center
-                // move forward
-
-                // move back
-
-                // park in backstage
-                parkFromCenterSpike();
-            } else {
-                // move forward to position
-
-                // turn to left spike
-
-                if (isPropPresent()) {
-                    // place prop on left
-                    // move forward
-                    // move backward
-
-
-                    // park in backstage
-                    parkFromLeftSpike();
-                }
-            }
-        }
-
-
-        telemetry.addData("Status: ", "exited if statement");
-        telemetry.update();
-    }
-
- */
     }
 
 
@@ -124,7 +101,9 @@ public class NovaAutoBackdropSideBlueNew extends LinearOpMode {
          */
 
         public void parkFromRightSpike () {
-
+            novaBot.backwardUsingEncoders(1, 0.3);
+            novaBot.strafeRightUsingEncoders(17.5, 0.4);
+            novaBot.forwardUsingEncoders(8, 0.4);
         }
 
         public void parkFromCenterSpike () {

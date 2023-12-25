@@ -29,6 +29,7 @@ public class NovaBot {
     YawPitchRollAngles robotOrientation;
 
     public Servo drone;
+    public Servo pocket;
     public ElapsedTime runtime = new ElapsedTime();
 
     public boolean isSliderMoving = false;
@@ -104,7 +105,7 @@ public class NovaBot {
 
         intakeMotor = hardwareMap.dcMotor.get("intakeMotor");
 
-        Servo pocket = hardwareMap.servo.get("pocket");
+        pocket = hardwareMap.servo.get("pocket");
 
         leftSliderMotor = hardwareMap.dcMotor.get("leftSliderMotor");
         rightSliderMotor = hardwareMap.dcMotor.get("rightSliderMotor");
@@ -505,6 +506,18 @@ public class NovaBot {
         }
 
         holdSlider();
+    }
+
+    public void placePixel() {
+        // slides up
+        pidMoveSliderToEncoderPosBrakeMode(1500, .5, 100);
+        // open pocket
+        pocket.setPosition(0);
+        linearOpMode.sleep(700);
+        // 0 degrees - POCKET CLOSED
+        pocket.setPosition(0.25);
+        // slides down
+        pidMoveSliderToEncoderPosBrakeMode(5, .3, 100);
     }
 
 }
