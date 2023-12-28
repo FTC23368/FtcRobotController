@@ -34,25 +34,44 @@ public class NovaAutoBackdropSideRedNew extends LinearOpMode {
         if (isPropPresent()) {
             novaBot.gyroTurnLeft(7);
             novaBot.forwardUsingEncoders(15, 0.3);
-            novaBot.backwardUsingEncoders(10, 0.3);
+            novaBot.backwardUsingEncoders(14, 0.3);
 
-            novaBot.placePixel();
+            // rotate
+            novaBot.gyroTurnRight(135);
+            // strafe
+            novaBot.strafeLeftUsingEncoders(24, 0.4);
+            // move forward to backdrop
+            novaBot.forwardUsingEncoders(36, 0.4);
+            // correct (if needed)
 
-            parkFromRightSpike();
+
+            //novaBot.placePixel();
+
+            //parkFromRightSpike();
 
         } else {
+            // move to look at center spike
+            novaBot.forwardUsingEncoders(2, 0.2);
+            novaBot.gyroTurnRight(-26);
 
             sleep(1250);
+            // check if prop is present
             if (isPropPresent()) {
+                novaBot.forwardUsingEncoders(15, 0.3);
+                novaBot.backwardUsingEncoders(13, 0.3);
 
-
-                novaBot.placePixel();
-                parkFromCenterSpike();
+                //novaBot.placePixel();
+                //parkFromCenterSpike();
             } else {
+                // move to right spike
+                novaBot.gyroTurnRight(-36);
+                // place on spike
+                novaBot.forwardUsingEncoders(12, 0.3);
+                // move back
+                novaBot.backwardUsingEncoders(12, 0.3);
 
-
-                novaBot.placePixel();
-                parkFromLeftSpike();
+                //novaBot.placePixel();
+                //parkFromLeftSpike();
             }
         }
     }
