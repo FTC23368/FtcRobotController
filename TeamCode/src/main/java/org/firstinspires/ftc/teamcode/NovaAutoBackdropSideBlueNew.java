@@ -33,8 +33,8 @@ public class NovaAutoBackdropSideBlueNew extends LinearOpMode {
         // check for prop on spike
         if (isPropPresent()) {
             novaBot.gyroTurnLeft(7);
-            novaBot.forwardUsingEncoders(14, 0.3);
-            novaBot.backwardUsingEncoders(14, 0.3);
+            novaBot.forwardUsingEncoders(12.5, 0.3);
+            novaBot.backwardUsingEncoders(12.5, 0.3);
 
             // go to backdrop to place pixel
             novaBot.gyroTurnLeft(126);
@@ -44,9 +44,11 @@ public class NovaAutoBackdropSideBlueNew extends LinearOpMode {
 
             // strafe
             novaBot.strafeRightUsingEncoders(18, 0.4);
-            novaBot.forwardUsingEncoders(34.75, 0.25);
+            novaBot.forwardUsingEncoders(39.75, 0.275);
+            sleep(400);
 
-            novaBot.placePixel();
+            // slides up and place pixel
+            //novaBot.placePixel();
 
             parkFromRightSpike();
 
@@ -56,7 +58,7 @@ public class NovaAutoBackdropSideBlueNew extends LinearOpMode {
             sleep(1250);
             if (isPropPresent()) {
                 novaBot.forwardUsingEncoders(15.5, 0.3);
-                novaBot.backwardUsingEncoders(15.5, 0.3);
+                novaBot.backwardUsingEncoders(17, 0.3);
 
                 // strafe
                 novaBot.strafeLeftUsingEncoders(24, 0.4);
@@ -67,7 +69,8 @@ public class NovaAutoBackdropSideBlueNew extends LinearOpMode {
                 // move forward to backdrop
                 novaBot.forwardUsingEncoders(19, 0.3);
 
-                novaBot.placePixel();
+                // place pixel on backdrop
+                // novaBot.placePixel();
                 parkFromCenterSpike();
             } else {
                 novaBot.forwardUsingEncoders(3, 0.2);
@@ -87,9 +90,11 @@ public class NovaAutoBackdropSideBlueNew extends LinearOpMode {
                 // strafe right a little
                 novaBot.strafeRightUsingEncoders(2, 0.4);
                 // forward to align to backdrop
-                novaBot.forwardUsingEncoders(15, 0.3);
+                novaBot.forwardUsingEncoders(17, 0.3);
+                sleep(400);
 
-                novaBot.placePixel();
+                // place pixel on backdrop
+                // novaBot.placePixel();
                 parkFromLeftSpike();
             }
         }
@@ -101,17 +106,21 @@ public class NovaAutoBackdropSideBlueNew extends LinearOpMode {
          */
 
         public void parkFromRightSpike () {
-            novaBot.backwardUsingEncoders(1, 0.3);
-            novaBot.strafeRightUsingEncoders(17.5, 0.4);
+            novaBot.backwardUsingEncoders(3, 0.3);
+            novaBot.strafeRightUsingEncoders(7, 0.4);
             novaBot.forwardUsingEncoders(8, 0.4);
         }
 
         public void parkFromCenterSpike () {
-
+            novaBot.backwardUsingEncoders(2, 0.3);
+            novaBot.strafeLeftUsingEncoders(25, 0.4);
+            novaBot.forwardUsingEncoders(8, 0.4);
         }
 
         public void parkFromLeftSpike () {
-
+            novaBot.backwardUsingEncoders(2, 0.3);
+            novaBot.strafeLeftUsingEncoders(18, 0.4);
+            novaBot.forwardUsingEncoders(8, 0.4);
         }
 
         /**
