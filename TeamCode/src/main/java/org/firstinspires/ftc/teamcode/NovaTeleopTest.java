@@ -52,7 +52,7 @@ public class NovaTeleopTest extends LinearOpMode {
         leftSliderMotor.setPower(0);
         rightSliderMotor.setPower(0);
 
-        leftSliderMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //leftSliderMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightSliderMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         leftSliderMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -99,16 +99,13 @@ public class NovaTeleopTest extends LinearOpMode {
             // This ensures all the powers maintain the same ratio,
             // but only if at least one is out of the range [-1, 1]
             double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
-            double frontLeftPower = (y + (-x) + (rx)) / denominator; // +
-            double backLeftPower = (y - (-x) + (rx)) / denominator; // -
-            double frontRightPower = (y - (-x) - (rx)) / denominator; // -
-            double backRightPower = (y + (-x) - (rx)) / denominator; // +
+            double frontLeftPower = (y + (-x) + rx) / denominator;
+            double backLeftPower = (y - (-x) + rx) / denominator;
+            double frontRightPower = (y - (-x) - rx) / denominator;
+            double backRightPower = (y + (-x) - rx) / denominator;
             telemetry.addLine("Denominator: " + denominator);
             telemetry.addLine("FL, FR, BL, BR Power: " + frontLeftPower + "," + frontRightPower
                     + "," + backLeftPower + "," + backRightPower);
-            telemetry.update();
-
-            telemetry.addData("rx", rx);
             telemetry.update();
 
             frontLeftMotor.setPower(frontLeftPower);
@@ -153,7 +150,7 @@ public class NovaTeleopTest extends LinearOpMode {
 
             // If dpad down is pressed, sliders fully retract
             if (gamepad2.dpad_down) {
-                pidMoveSliderToEncoderPosBrakeMode(5, .3, 100);
+                pidMoveSliderToEncoderPosBrakeMode(0, .3, 100);
             }
 
             // POCKET MOVEMENT --------------------------------------------------------------------|
@@ -280,7 +277,10 @@ public class NovaTeleopTest extends LinearOpMode {
             }
         }
 
-        holdSlider();
+        telemetry.addData("Status", "finished moving down");
+        telemetry.update();
+        resetSliderEncoderWithLimitSwitch();
+        //holdSlider();
     }
 
     public void resetSliderEncoderWithLimitSwitch() {
@@ -290,6 +290,8 @@ public class NovaTeleopTest extends LinearOpMode {
         }
 
         if (limitSwitch.isPressed()) {
+            telemetry.addData("Status", "limit switch pressed");
+            telemetry.update();
             slidersResetByLimitSwitch = true;
         }
 
@@ -298,6 +300,7 @@ public class NovaTeleopTest extends LinearOpMode {
 
         leftSliderMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightSliderMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
     }
 
 }

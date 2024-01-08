@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 
 
 @TeleOp
-public class NovaTeleOpJudging extends LinearOpMode {
+public class NovaJudging extends LinearOpMode {
 
     public DcMotor leftSliderMotor;
     public DcMotor rightSliderMotor;
