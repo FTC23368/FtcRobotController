@@ -52,7 +52,7 @@ public class NovaTeleopTest extends LinearOpMode {
         leftSliderMotor.setPower(0);
         rightSliderMotor.setPower(0);
 
-        //leftSliderMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftSliderMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightSliderMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         leftSliderMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -71,12 +71,14 @@ public class NovaTeleopTest extends LinearOpMode {
         //frontLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         //backLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
+        //resetSliderEncoderWithLimitSwitch();
+
         waitForStart();
 
         if (isStopRequested()) return;
 
         while (opModeIsActive()) {
-            // DRIVEBASE MOVEMENT -----------------------------------------------------------------|
+            // DRIVEBASE --------------------------------------------------------------------------|
             double x,y,rx;
             if (-gamepad1.left_stick_x < 0.5) {
                 x = (gamepad1.left_stick_x * 1.1)*0.6; // Counteract imperfect strafing
@@ -113,7 +115,7 @@ public class NovaTeleopTest extends LinearOpMode {
             frontRightMotor.setPower(frontRightPower);
             backRightMotor.setPower(backRightPower);
 
-            // INTAKE MOVEMENT --------------------------------------------------------------------|
+            // INTAKE -----------------------------------------------------------------------------|
             boolean currentButtonState = gamepad2.x;
 
             if (currentButtonState && !previousButtonState) {
@@ -124,7 +126,7 @@ public class NovaTeleopTest extends LinearOpMode {
 
             previousButtonState = currentButtonState;
 
-            // OUTTAKE MOVEMENT -------------------------------------------------------------------|
+            // OUTTAKE ----------------------------------------------------------------------------|
             boolean outtakeButtonState = gamepad2.a;
 
             if (outtakeButtonState && !outtakePreviousButtonState) {
@@ -135,13 +137,15 @@ public class NovaTeleopTest extends LinearOpMode {
 
             outtakePreviousButtonState = outtakeButtonState;
 
-            // LINEAR SLIDES MOVEMENT -------------------------------------------------------------|
+            // LINEAR SLIDES ----------------------------------------------------------------------|
             // If dpad left is pressed, sliders up to medium height
             if (gamepad2.dpad_left) {
                 telemetry.addLine("dpad_left has been pressed");
                 telemetry.update();
                 pidMoveSliderToEncoderPosBrakeMode(1500, .5, 100);
             }
+            telemetry.addLine("Current Position: " + leftSliderMotor.getCurrentPosition());
+            telemetry.update();
 
             // If dpad up is pressed, sliders up to high height
                 /*if (gamepad2.dpad_up) {
@@ -151,9 +155,10 @@ public class NovaTeleopTest extends LinearOpMode {
             // If dpad down is pressed, sliders fully retract
             if (gamepad2.dpad_down) {
                 pidMoveSliderToEncoderPosBrakeMode(0, .3, 100);
+
             }
 
-            // POCKET MOVEMENT --------------------------------------------------------------------|
+            // POCKET -----------------------------------------------------------------------------|
             if (gamepad2.y) {
                 // 45 degrees - POCKET OPEN
                 //pocket.setDirection(Servo.Direction.REVERSE);
@@ -163,7 +168,7 @@ public class NovaTeleopTest extends LinearOpMode {
                 pocket.setPosition(0.25);
             }
 
-            // DRONE MOVEMENT ---------------------------------------------------------------------|
+            // DRONE ------------------------------------------------------------------------------|
             if (gamepad2.b) {
                 // Drone launched
                 drone.setPosition(0.08);
@@ -174,7 +179,10 @@ public class NovaTeleopTest extends LinearOpMode {
     }
 
 
-    // PID METHODS --------------------------------------------------------------------------------|
+
+    /**
+     * PID METHODS
+     */
 
     public void pidMoveSliderToEncoderPosBrakeMode (int targetEncoderPos, double power, int slowDownEncoderPos) {
         isSliderMoving = true;
@@ -188,8 +196,7 @@ public class NovaTeleopTest extends LinearOpMode {
             pidSliderMoveUpBrakeMode(targetEncoderPos, power, slowDownEncoderPos);
         } else if (targetEncoderPos < leftSliderMotor.getCurrentPosition()) {
             pidSliderMoveDownBrakeMode(targetEncoderPos, power, slowDownEncoderPos);
-            telemetry.addLine("Current Position: " + leftSliderMotor.getCurrentPosition());
-            telemetry.update();
+
         }
 
         isSliderMoving = false;
@@ -214,6 +221,8 @@ public class NovaTeleopTest extends LinearOpMode {
                 rightSliderMotor.setPower((power + kP * encoderDiff));
                 leftSliderMotor.setPower(power - kP * encoderDiff);
             }
+            telemetry.addLine("Current Position: " + leftSliderMotor.getCurrentPosition());
+            telemetry.update();
         }
 
 
@@ -228,6 +237,8 @@ public class NovaTeleopTest extends LinearOpMode {
                 rightSliderMotor.setPower(power + kP *encoderDiff);
                 leftSliderMotor.setPower(power-kP * encoderDiff);
             }
+            telemetry.addLine("Current Position: " + leftSliderMotor.getCurrentPosition());
+            telemetry.update();
         }
 
 
@@ -261,12 +272,14 @@ public class NovaTeleopTest extends LinearOpMode {
                 rightSliderMotor.setPower(power + kP * encoderDiff);
                 leftSliderMotor.setPower(power - kP * encoderDiff);
             }
+            telemetry.addLine("Current Position: " + leftSliderMotor.getCurrentPosition());
+            telemetry.update();
         }
 
-        while (getCurrentSliderEncoderPos() >= targetEncoderPos && opModeIsActive()) {
+        while (getCurrentSliderEncoderPos() >= targetEncoderPos && opModeIsActive() && !limitSwitch.isPressed()) {
             encoderDiff = leftSliderMotor.getCurrentPosition() - rightSliderMotor.getCurrentPosition();
 
-            power = -0.1;
+            power = -0.2;
 
             if (encoderDiff >= 0) {
                 leftSliderMotor.setPower(power - kP * encoderDiff);
@@ -275,12 +288,14 @@ public class NovaTeleopTest extends LinearOpMode {
                 rightSliderMotor.setPower(power + kP * encoderDiff);
                 leftSliderMotor.setPower(power - kP * encoderDiff);
             }
+            telemetry.addLine("Current Position: " + leftSliderMotor.getCurrentPosition());
+            telemetry.addData("", limitSwitch.isPressed());
+            telemetry.update();
         }
 
         telemetry.addData("Status", "finished moving down");
         telemetry.update();
-        resetSliderEncoderWithLimitSwitch();
-        //holdSlider();
+        holdSlider();
     }
 
     public void resetSliderEncoderWithLimitSwitch() {

@@ -29,10 +29,10 @@ public class NovaAutoBackdropSideRedNew extends LinearOpMode {
         novaBot.gyroTurnLeft(26);
         novaBot.backwardUsingEncoders(2, 0.2);
 
-        sleep(1250);
+        //sleep(1250);
         // check for prop on spike
         if (isPropPresent()) {
-            novaBot.gyroTurnLeft(7);
+            novaBot.gyroTurnLeft(17);
             novaBot.forwardUsingEncoders(15, 0.3);
             novaBot.backwardUsingEncoders(14, 0.3);
 

@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
@@ -20,6 +21,9 @@ import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 public class NovaBot {
+
+    public int count = 0;
+
     public DcMotor leftSliderMotor;
     public DcMotor rightSliderMotor;
     public DcMotor frontLeftMotor, backLeftMotor, frontRightMotor, backRightMotor;
@@ -27,12 +31,14 @@ public class NovaBot {
 
     public IMU imu;
     YawPitchRollAngles robotOrientation;
+    public TouchSensor limitSwitch;
+    public boolean isSliderMoving = false;
+    public boolean slidersResetByLimitSwitch = false;
 
     public Servo drone;
     public Servo pocket;
     public ElapsedTime runtime = new ElapsedTime();
 
-    public boolean isSliderMoving = false;
 
     public static final double ENCODER_TICKS_PER_INCH = (3009/69);
     public static final double STRAFING_ENCODER_TICKS_PER_INCH = (50.75);
@@ -107,9 +113,21 @@ public class NovaBot {
 
         pocket = hardwareMap.servo.get("pocket");
 
+        limitSwitch = hardwareMap.touchSensor.get("limitSwitch");
+
         leftSliderMotor = hardwareMap.dcMotor.get("leftSliderMotor");
         rightSliderMotor = hardwareMap.dcMotor.get("rightSliderMotor");
         rightSliderMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        // These lines reset the encoder and do the job of the limit switch method
+        leftSliderMotor.setPower(0);
+        rightSliderMotor.setPower(0);
+
+        leftSliderMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightSliderMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        leftSliderMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightSliderMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
 
         linearOpMode.telemetry.addData("Status: ", "Robot Initialized");
@@ -181,7 +199,7 @@ public class NovaBot {
         imu.resetYaw();
         double currentHeading = getGyroAngle();
 
-        while (this.linearOpMode.opModeIsActive() && !isTargetAngleReached(currentHeading, targetAngle)) {
+        while (this.linearOpMode.opModeIsActive() && currentHeading > targetAngle) {
             currentHeading = getGyroAngle();
 
             this.linearOpMode.telemetry.addData("currentHeading: ", getAngle());
@@ -203,10 +221,15 @@ public class NovaBot {
     }
 
     public void gyroTurnLeft(double targetAngle) {
+        count++;
+
+        linearOpMode.telemetry.addData("Status", "entered gyroTurnLeft");
+        linearOpMode.telemetry.update();
+
         imu.resetYaw();
         double currentHeading = getGyroAngle();
 
-        while (this.linearOpMode.opModeIsActive() && !isTargetAngleReached(currentHeading, targetAngle)) {
+        while (this.linearOpMode.opModeIsActive() && currentHeading < targetAngle) {
             currentHeading = getGyroAngle();
 
             this.linearOpMode.telemetry.addData("currentHeading: ", getAngle());
@@ -221,7 +244,7 @@ public class NovaBot {
         this.linearOpMode.telemetry.addData("Current Angle ", getAngle());
         this.linearOpMode.telemetry.update();
 
-        this.linearOpMode.telemetry.addData("Status: ", " exited while loop");
+        this.linearOpMode.telemetry.addData("Status ", "exited while loop");
         this.linearOpMode.telemetry.update();
 
         stopAllMotors();
@@ -237,7 +260,7 @@ public class NovaBot {
 
 
     private boolean isTargetAngleReached(double currentAngle, double targetAngle) {
-        final double ANGLE_TOLERANCE = 0.5; // degrees, adjust as needed
+        final double ANGLE_TOLERANCE = 5; // degrees, adjust as needed
         return Math.abs(targetAngle - currentAngle) < ANGLE_TOLERANCE;
     }
 
@@ -254,7 +277,7 @@ public class NovaBot {
     }
 
     /**
-     * METHOD THAT MOVES FORWARD USING MOTOR ENCODERS
+     * METHODS THAT MOVE FORWARD/BACKWARD USING MOTOR ENCODERS
      */
     public void forwardUsingEncoders (double inches, double speed){
         frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -416,8 +439,7 @@ public class NovaBot {
             pidSliderMoveUpBrakeMode(targetEncoderPos, power, slowDownEncoderPos);
         } else if (targetEncoderPos < leftSliderMotor.getCurrentPosition()) {
             pidSliderMoveDownBrakeMode(targetEncoderPos, power, slowDownEncoderPos);
-            linearOpMode.telemetry.addLine("Current Position: " + leftSliderMotor.getCurrentPosition());
-            linearOpMode.telemetry.update();
+
         }
 
         isSliderMoving = false;
@@ -442,6 +464,8 @@ public class NovaBot {
                 rightSliderMotor.setPower((power + kP * encoderDiff));
                 leftSliderMotor.setPower(power - kP * encoderDiff);
             }
+            linearOpMode.telemetry.addLine("Current Position: " + leftSliderMotor.getCurrentPosition());
+            linearOpMode.telemetry.update();
         }
 
 
@@ -456,6 +480,8 @@ public class NovaBot {
                 rightSliderMotor.setPower(power + kP *encoderDiff);
                 leftSliderMotor.setPower(power-kP * encoderDiff);
             }
+            linearOpMode.telemetry.addLine("Current Position: " + leftSliderMotor.getCurrentPosition());
+            linearOpMode.telemetry.update();
         }
 
 
@@ -489,12 +515,14 @@ public class NovaBot {
                 rightSliderMotor.setPower(power + kP * encoderDiff);
                 leftSliderMotor.setPower(power - kP * encoderDiff);
             }
+            linearOpMode.telemetry.addLine("Current Position: " + leftSliderMotor.getCurrentPosition());
+            linearOpMode.telemetry.update();
         }
 
-        while (getCurrentSliderEncoderPos() >= targetEncoderPos && linearOpMode.opModeIsActive()) {
+        while (getCurrentSliderEncoderPos() >= targetEncoderPos && linearOpMode.opModeIsActive() && !limitSwitch.isPressed()) {
             encoderDiff = leftSliderMotor.getCurrentPosition() - rightSliderMotor.getCurrentPosition();
 
-            power = -0.1;
+            power = -0.2;
 
             if (encoderDiff >= 0) {
                 leftSliderMotor.setPower(power - kP * encoderDiff);
@@ -503,21 +531,34 @@ public class NovaBot {
                 rightSliderMotor.setPower(power + kP * encoderDiff);
                 leftSliderMotor.setPower(power - kP * encoderDiff);
             }
+            linearOpMode.telemetry.addLine("Current Position: " + leftSliderMotor.getCurrentPosition());
+            linearOpMode.telemetry.addData("", limitSwitch.isPressed());
+            linearOpMode.telemetry.update();
         }
 
+        linearOpMode.telemetry.addData("Status", "finished moving down");
+        linearOpMode.telemetry.update();
         holdSlider();
     }
 
-    public void placePixel() {
-        // slides up
-        pidMoveSliderToEncoderPosBrakeMode(1500, .5, 100);
-        // open pocket
-        pocket.setPosition(0);
-        linearOpMode.sleep(700);
-        // 0 degrees - POCKET CLOSED
-        pocket.setPosition(0.25);
-        // slides down
-        pidMoveSliderToEncoderPosBrakeMode(5, .3, 100);
+    public void resetSliderEncoderWithLimitSwitch() {
+        while (!limitSwitch.isPressed()) {
+            leftSliderMotor.setPower(-0.1);
+            rightSliderMotor.setPower(-0.1);
+        }
+
+        if (limitSwitch.isPressed()) {
+            linearOpMode.telemetry.addData("Status", "limit switch pressed");
+            linearOpMode.telemetry.update();
+            slidersResetByLimitSwitch = true;
+        }
+
+        leftSliderMotor.setPower(0);
+        rightSliderMotor.setPower(0);
+
+        leftSliderMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightSliderMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
     }
 
 }

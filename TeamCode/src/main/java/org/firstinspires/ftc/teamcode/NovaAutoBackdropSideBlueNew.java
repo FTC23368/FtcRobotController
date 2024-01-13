@@ -44,12 +44,13 @@ public class NovaAutoBackdropSideBlueNew extends LinearOpMode {
 
             // strafe
             novaBot.strafeRightUsingEncoders(18, 0.4);
-            novaBot.forwardUsingEncoders(39.75, 0.275);
+            novaBot.forwardUsingEncoders(38.75, 0.275);
             sleep(400);
 
             // slides up and place pixel
-            //novaBot.placePixel();
+            placePixel();
 
+            // park in backstage
             parkFromRightSpike();
 
         } else {
@@ -70,14 +71,16 @@ public class NovaAutoBackdropSideBlueNew extends LinearOpMode {
                 novaBot.forwardUsingEncoders(19, 0.3);
 
                 // place pixel on backdrop
-                // novaBot.placePixel();
+                placePixel();
+
+                // park in backstage
                 parkFromCenterSpike();
             } else {
                 novaBot.forwardUsingEncoders(3, 0.2);
-                novaBot.gyroTurnLeft(30);
+                novaBot.gyroTurnLeft(47);
                 novaBot.backwardUsingEncoders(1, 0.2);
-
-                novaBot.gyroTurnLeft(10);
+                novaBot.gyroTurnLeft(47);
+                sleep(3000);
                 novaBot.forwardUsingEncoders(14, 0.3);
                 novaBot.backwardUsingEncoders(8.5, 0.3);
 
@@ -94,30 +97,47 @@ public class NovaAutoBackdropSideBlueNew extends LinearOpMode {
                 sleep(400);
 
                 // place pixel on backdrop
-                // novaBot.placePixel();
+                placePixel();
+
+                // park in backstage
                 parkFromLeftSpike();
             }
         }
     }
 
-
         /**
-         * METHODS FOR MOVING TO BACKSTAGE AND PARKING
+         * PLACING PIXEL ON BACKDROP
          */
 
-        public void parkFromRightSpike () {
+        public void placePixel() {
+            novaBot.linearOpMode.telemetry.addData("Status", "placing pixel");
+            novaBot.linearOpMode.telemetry.update();
+            novaBot.pidMoveSliderToEncoderPosBrakeMode(1500, .5, 100);
+            novaBot.pocket.setPosition(0);
+            sleep(700);
+            novaBot.pocket.setPosition(0.25);
+            novaBot.pidMoveSliderToEncoderPosBrakeMode(0, .3, 100);
+            novaBot.linearOpMode.telemetry.addData("Status", "finished placing pixel");
+            novaBot.linearOpMode.telemetry.update();
+        }
+
+        /**
+         * METHODS FOR PARKING
+         */
+
+        public void parkFromRightSpike() {
             novaBot.backwardUsingEncoders(3, 0.3);
-            novaBot.strafeRightUsingEncoders(7, 0.4);
+            novaBot.strafeRightUsingEncoders(12, 0.4);
             novaBot.forwardUsingEncoders(8, 0.4);
         }
 
-        public void parkFromCenterSpike () {
+        public void parkFromCenterSpike() {
             novaBot.backwardUsingEncoders(2, 0.3);
-            novaBot.strafeLeftUsingEncoders(25, 0.4);
-            novaBot.forwardUsingEncoders(8, 0.4);
+            novaBot.strafeLeftUsingEncoders(20, 0.4);
+            novaBot.forwardUsingEncoders(4, 0.4);
         }
 
-        public void parkFromLeftSpike () {
+        public void parkFromLeftSpike() {
             novaBot.backwardUsingEncoders(2, 0.3);
             novaBot.strafeLeftUsingEncoders(18, 0.4);
             novaBot.forwardUsingEncoders(8, 0.4);
