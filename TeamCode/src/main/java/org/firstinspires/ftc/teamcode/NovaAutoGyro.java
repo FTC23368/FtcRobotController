@@ -25,15 +25,7 @@ public class NovaAutoGyro extends LinearOpMode {
         waitForStart();
         novaBot.runtime.reset();
 
-        novaBot.gyroTurnLeft(45);
-        sleep(1500);
-        novaBot.gyroTurnLeft(45);
-        sleep(1500);
-        novaBot.gyroTurnLeft(45);
-
-        novaBot.linearOpMode.telemetry.addData("count", novaBot.count);
-        novaBot.linearOpMode.telemetry.update();
-        sleep(3000);
+        novaBot.backwardUsingEncoders(5, 0.3);
     }
 
 }

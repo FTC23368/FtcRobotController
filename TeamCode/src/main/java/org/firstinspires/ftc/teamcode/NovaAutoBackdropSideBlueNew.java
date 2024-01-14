@@ -80,18 +80,18 @@ public class NovaAutoBackdropSideBlueNew extends LinearOpMode {
                 novaBot.gyroTurnLeft(47);
                 novaBot.backwardUsingEncoders(1, 0.2);
                 novaBot.gyroTurnLeft(47);
-                sleep(3000);
                 novaBot.forwardUsingEncoders(14, 0.3);
                 novaBot.backwardUsingEncoders(8.5, 0.3);
 
                 // rotate
+                novaBot.gyroTurnLeft(32);
                 novaBot.gyroTurnLeft(32);
                 // strafe left
                 novaBot.strafeLeftUsingEncoders(5, 0.4);
                 // forward
                 novaBot.forwardUsingEncoders(24, 0.3);
                 // strafe right a little
-                novaBot.strafeRightUsingEncoders(2, 0.4);
+                novaBot.strafeRightUsingEncoders(6, 0.4);
                 // forward to align to backdrop
                 novaBot.forwardUsingEncoders(17, 0.3);
                 sleep(400);
@@ -139,7 +139,7 @@ public class NovaAutoBackdropSideBlueNew extends LinearOpMode {
 
         public void parkFromLeftSpike() {
             novaBot.backwardUsingEncoders(2, 0.3);
-            novaBot.strafeLeftUsingEncoders(18, 0.4);
+            novaBot.strafeLeftUsingEncoders(15, 0.4);
             novaBot.forwardUsingEncoders(8, 0.4);
         }
 
