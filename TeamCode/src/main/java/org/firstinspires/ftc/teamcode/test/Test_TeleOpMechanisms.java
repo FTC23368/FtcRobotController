@@ -1,17 +1,15 @@
 // This is where we test individual mechanisms (intake, linear slides, pocket)
 
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.test;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
-import com.qualcomm.robotcore.hardware.Gamepad;
 
 @TeleOp
-public class NovaMechanismTesting extends LinearOpMode {
+public class Test_TeleOpMechanisms extends LinearOpMode {
 
     public DcMotor leftSliderMotor;
     public DcMotor rightSliderMotor;

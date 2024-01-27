@@ -1,17 +1,17 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.auto;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.teamcode.NovaBot;
 
 import java.util.List;
 
 // BACKDROP SIDE
 
 @Autonomous
-public class NovaAutoBackdropSideRedNew extends LinearOpMode {
+public class Auto_BackdropSideRed extends LinearOpMode {
 
     NovaBot novaBot;
 

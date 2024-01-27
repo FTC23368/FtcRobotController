@@ -1,13 +1,14 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.test;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
+
+import org.firstinspires.ftc.teamcode.NovaBot;
 
 // BACKDROP SIDE
 
 @Autonomous
-public class NovaAutoTestEncoders extends LinearOpMode {
+public class Test_Encoders extends LinearOpMode {
 
     NovaBot novaBot;
     static final double MOTOR_TICK_COUNTS = 537.6;
