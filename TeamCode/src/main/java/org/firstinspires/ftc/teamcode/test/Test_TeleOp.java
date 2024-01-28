@@ -114,6 +114,14 @@ public class Test_TeleOp extends LinearOpMode {
             frontRightMotor.setPower(frontRightPower);
             backRightMotor.setPower(backRightPower);
 
+            // SLOW-MO
+            while (gamepad1.right_bumper) {
+                frontLeftMotor.setPower(-0.09);
+                backLeftMotor.setPower(-0.09);
+                frontRightMotor.setPower(-0.09);
+                backRightMotor.setPower(-0.09);
+            }
+
             // INTAKE -----------------------------------------------------------------------------|
             boolean currentButtonState = gamepad2.x;
 
@@ -176,8 +184,6 @@ public class Test_TeleOp extends LinearOpMode {
             }
         }
     }
-
-
 
     /**
      * PID METHODS
