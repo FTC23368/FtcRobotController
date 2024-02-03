@@ -43,7 +43,7 @@ public class Auto_BackdropSideBlue extends LinearOpMode {
             novaBot.linearOpMode.telemetry.update();
 
             // strafe
-            novaBot.strafeRightUsingEncoders(18, 0.4);
+            novaBot.strafeRightUsingEncoders(15, 0.4);
             novaBot.forwardUsingEncoders(38.75, 0.275);
             sleep(400);
 
@@ -133,7 +133,7 @@ public class Auto_BackdropSideBlue extends LinearOpMode {
 
         public void parkFromCenterSpike() {
             novaBot.backwardUsingEncoders(2, 0.3);
-            novaBot.strafeLeftUsingEncoders(20, 0.4);
+            novaBot.strafeLeftUsingEncoders(21.5, 0.4);
             novaBot.forwardUsingEncoders(4, 0.4);
         }
 
